@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Production build
+dist/
+dist-ssr/
+
+# Local environment variables
+.env
+.env.local
+.env.*.local
+
+# TypeScript / editor / OS artifacts
+*.tsbuildinfo
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,213 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #F5F6F8;
+    color: #191919;
+    font-feature-settings: "ss01", "ss02", "cv01";
+  }
+}
+
+@layer components {
+  .suho-student {
+    --suho-paper: #fcf9f2;
+    --suho-ink: #2d201a;
+    --suho-line: #e7ded0;
+    --suho-yellow: #fee500;
+    background: var(--suho-paper);
+    color: var(--suho-ink);
+  }
+
+  .suho-sheet {
+    @apply rounded-2xl border bg-white;
+    border-color: var(--suho-line);
+  }
+
+  .suho-primary, .suho-secondary {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-base font-extrabold transition-colors;
+  }
+
+  .suho-primary {
+    background: var(--suho-yellow);
+    color: var(--suho-ink);
+    @apply hover:bg-[#f4d900] disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .suho-secondary {
+    @apply border border-[#e7ded0] bg-white text-[#2d201a] hover:bg-[#f7f4ef];
+  }
+
+  .suho-field {
+    @apply min-h-12 rounded-xl border border-[#d7cbb9] bg-[#fffcf7] px-3.5 py-2.5 text-base text-[#2d201a] placeholder:text-[#75675d];
+  }
+
+  .suho-student :is(button, input, textarea):focus-visible,
+  .suho-student [tabindex="-1"]:focus-visible {
+    outline: 2px solid #7c4d08;
+    outline-offset: 3px;
+  }
+}
+
+@keyframes suhoRevealPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.86) translateY(14px);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.03) translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-suho-reveal {
+  animation: suhoRevealPop 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.letter-paper-warm {
+  background-color: #FFFDF7;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 31px,
+    rgba(217, 179, 120, 0.30) 31px,
+    rgba(217, 179, 120, 0.30) 32px
+  );
+  background-position: 0 4px;
+  line-height: 32px;
+}
+
+.letter-paper-rose {
+  background-color: #FFFBF9;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 31px,
+    rgba(225, 160, 150, 0.26) 31px,
+    rgba(225, 160, 150, 0.26) 32px
+  );
+  background-position: 0 4px;
+  line-height: 32px;
+}
+
+@keyframes envelopeFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-envelope-float {
+  animation: envelopeFloat 2.6s ease-in-out infinite;
+}
+
+@keyframes envelopeFlapOpen {
+  0% {
+    transform: rotateX(0deg);
+  }
+  100% {
+    transform: rotateX(-165deg);
+  }
+}
+
+.animate-flap-open {
+  transform-origin: top;
+  animation: envelopeFlapOpen 0.36s ease-out forwards;
+}
+
+@keyframes letterUnfold {
+  0% {
+    opacity: 0;
+    transform: perspective(1100px) rotateX(-52deg) scaleY(0.74) translateY(20px);
+  }
+  60% {
+    opacity: 1;
+    transform: perspective(1100px) rotateX(4deg) scaleY(1.01) translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1100px) rotateX(0deg) scaleY(1) translateY(0);
+  }
+}
+
+.animate-letter-unfold {
+  transform-origin: top center;
+  animation: letterUnfold 0.62s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-envelope-float,
+  .animate-flap-open,
+  .animate-letter-unfold,
+  .animate-suho-reveal {
+    animation: none;
+  }
+}
+
+/* A4 한 장 인쇄 최적화 스타일 */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 7mm 8mm;
+  }
+
+  html, body {
+    background: #FFFFFF !important;
+    color: #191919 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .a4-page {
+    width: 100% !important;
+    max-height: 281mm !important;
+    height: 281mm !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    background: #FFFFFF !important;
+    border: 2px solid #191919 !important;
+    border-radius: 16px !important;
+    padding: 6mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  .a4-slip-page {
+    width: 100% !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    background: #FFFFFF !important;
+    padding: 2mm 0 !important;
+  }
+
+  .a4-page-break {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .a4-page-break:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+}
