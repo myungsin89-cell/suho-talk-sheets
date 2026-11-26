@@ -23,6 +23,7 @@ import { WeeklyQuestPanel, SaveWeeklyQuest } from './WeeklyQuestPanel';
 import { TeacherRecordsTab } from './TeacherRecordsTab';
 import { StudentRecordModal } from './StudentRecordModal';
 import { TeacherLetterCaptureModal } from './TeacherLetterCaptureModal';
+import { SuhoGuidePoster } from './SuhoGuidePoster';
 import { TeacherLetterRecord } from '../utils/teacherRecords';
 import { getScoreStage, isIdentityRevealed } from '../utils/classProgress';
 import { QRCodeSVG } from 'qrcode.react';
@@ -219,6 +220,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
   // 비밀번호 배포 & 접속 QR & 새 학급 모달 상태
   const [showStudentPins, setShowStudentPins] = useState(false);
   const [showLoginSlipsModal, setShowLoginSlipsModal] = useState(false);
+  const [showGuidePosterModal, setShowGuidePosterModal] = useState(false);
   const [showQrBoardModal, setShowQrBoardModal] = useState(false);
   const [showCreateClassModal, setShowCreateClassModal] = useState(false);
   const [anonymizeRecords, setAnonymizeRecords] = useState(false);
@@ -292,6 +294,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
         if (previewWorkbookStudent) setPreviewWorkbookStudent(null);
         if (awardMedalTarget) setAwardMedalTarget(null);
         if (showLoginSlipsModal) setShowLoginSlipsModal(false);
+        if (showGuidePosterModal) setShowGuidePosterModal(false);
         if (showQrBoardModal) setShowQrBoardModal(false);
         if (showCreateClassModal) setShowCreateClassModal(false);
         if (detailRecordStudentId) setDetailRecordStudentId(null);
@@ -306,6 +309,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
     previewWorkbookStudent,
     awardMedalTarget,
     showLoginSlipsModal,
+    showGuidePosterModal,
     showQrBoardModal,
     showCreateClassModal,
     detailRecordStudentId,
@@ -1130,6 +1134,10 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
               <button type="button" onClick={() => setShowQrBoardModal(true)}
                 className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-[#e5e7eb] px-4 text-sm font-bold hover:bg-[#f5f6f8]">
                 <QrCode size={17} aria-hidden="true" /> 교실에 QR 띄우기
+              </button>
+              <button type="button" onClick={() => setShowGuidePosterModal(true)}
+                className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-[#e9d9ae] bg-[#fff5d6] px-4 text-sm font-extrabold text-[#735020] hover:bg-[#fee500]">
+                <Printer size={17} aria-hidden="true" /> 규칙·점수 안내판 인쇄
               </button>
               <button type="button" onClick={async () => {
                 try {
@@ -2061,7 +2069,9 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
       {/* @media print 전용 */}
       {/* ================================================================= */}
       <div className="hidden print-only">
-        {showLoginSlipsModal ? (
+        {showGuidePosterModal ? (
+          <SuhoGuidePoster classNameText={config.className} />
+        ) : showLoginSlipsModal ? (
           <LoginSlipPrintSheet
             classId={classId}
             students={students}
@@ -2917,6 +2927,53 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                 }`}>
                 {savingProgress ? '저장 중…' : pendingStageChange === 'reveal' ? '학생에게 정체 공개' : `${pendingStageChange}단계로 전환하기`}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showGuidePosterModal && (
+        <div
+          className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-[2px] flex items-center justify-center p-4 no-print"
+          onClick={() => setShowGuidePosterModal(false)}
+        >
+          <div
+            className="bg-[#F5F6F8] border border-[#E5E7EB] rounded-xl max-w-4xl w-full max-h-[92vh] flex flex-col p-5 sm:p-6 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E5E7EB] pb-3 mb-4">
+              <div className="flex items-center gap-2.5">
+                <Printer className="w-5 h-5 text-[#191919]" />
+                <div>
+                  <h3 className="text-lg font-extrabold text-[#191919]">
+                    교실 게시판용 규칙·점수 안내판 (A4 1장)
+                  </h3>
+                  <p className="text-xs text-[#767676]">
+                    인쇄하거나 PDF로 저장해 교실 게시판에 붙여두세요. (A3 확대 인쇄도 선명합니다!)
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="px-4 py-2 rounded-lg bg-[#FEE500] hover:bg-[#F5DC00] text-[#3C1E1E] text-xs font-black flex items-center gap-1.5"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>안내판 인쇄 / PDF 저장</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowGuidePosterModal(false)}
+                  className="p-1.5 rounded-lg hover:bg-gray-200"
+                >
+                  <X className="w-5 h-5 text-[#191919]" />
+                </button>
+              </div>
+            </div>
+
+            <div className="overflow-y-auto pr-1">
+              <SuhoGuidePoster classNameText={config.className} />
             </div>
           </div>
         </div>
