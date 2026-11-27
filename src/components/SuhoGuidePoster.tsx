@@ -78,7 +78,7 @@ export const SuhoGuidePoster: React.FC<SuhoGuidePosterProps> = ({
                 </div>
               </div>
               <p className="text-[11.5px] text-[#324239] leading-relaxed font-semibold">
-                내가 누구인지 들키지 않게 조용히 짝꿍을 챙겨주고, 실천한 일은 잊지 말고 수호톡에 기록해요.
+                내가 누구인지 들키지 않게 조용히 내가 챙겨줄 친구를 챙겨주고, 실천한 일은 잊지 말고 수호톡에 기록해요.
               </p>
             </div>
           </div>
@@ -142,7 +142,7 @@ export const SuhoGuidePoster: React.FC<SuhoGuidePosterProps> = ({
                 </div>
               </div>
               <p className="text-[11.5px] text-[#324239] leading-relaxed font-semibold">
-                내 짝꿍에게만 잘해주면 금방 들켜요! 평소 여러 친구들을 두루 챙겨야 끝까지 안 들킬 수 있어요.
+                내가 챙겨줄 친구에게만 잘해주면 금방 들켜요! 평소 여러 친구들을 두루 챙겨야 끝까지 안 들킬 수 있어요.
               </p>
             </div>
           </div>
@@ -169,7 +169,7 @@ export const SuhoGuidePoster: React.FC<SuhoGuidePosterProps> = ({
               1단계 · 첫 편지
             </span>
             <p className="text-[11.5px] font-bold text-[#2D201A] mt-1.5 leading-snug">
-              내 수호천사에게 첫 편지를 보내고, 내 짝꿍에게 비밀 답장을 써요.
+              내 수호천사에게 첫 편지를 보내고, 내가 챙겨줄 친구에게 비밀 답장을 써요.
             </p>
           </div>
 
@@ -204,7 +204,7 @@ export const SuhoGuidePoster: React.FC<SuhoGuidePosterProps> = ({
           <div className="flex items-center gap-2 min-w-0">
             <MessageCircle className="w-4 h-4 text-[#B45309] shrink-0" strokeWidth={2.4} />
             <p className="text-[11.5px] font-bold text-[#3C1E1E]">
-              <strong className="font-black">깜짝 이벤트 · 수호천사와 1:1 톡하기</strong> — 선생님이 대화방을 열어 주시면 수호천사·짝꿍과 실시간 비밀 톡을 나눌 수 있어요!
+              <strong className="font-black">깜짝 이벤트 · 수호천사와 1:1 톡하기</strong> — 선생님이 대화방을 열어 주시면 나의 수호천사·내가 챙겨줄 친구와 실시간 비밀 톡을 나눌 수 있어요!
             </p>
           </div>
           <span className="shrink-0 px-2 py-0.5 rounded-full bg-white border border-[#E9D9AE] text-[10.5px] font-black text-[#735020]">
@@ -224,7 +224,7 @@ export const SuhoGuidePoster: React.FC<SuhoGuidePosterProps> = ({
             <span>수호톡 점수 얻는 방법 &amp; 실천 예시</span>
           </h2>
           <span className="text-[10.5px] font-extrabold text-[#1B4D3E] bg-[#EEF7F1] border border-[#B7DBC5] px-2.5 py-0.5 rounded-full shrink-0">
-            상시 활동 하루 2회 · 주간 미션 1회 (짝꿍 확인 시 지급!)
+            상시 활동 하루 2회 · 주간 미션 1회 (친구 확인 시 지급!)
           </span>
         </div>
 
@@ -363,7 +363,7 @@ export const SuhoGuidePoster: React.FC<SuhoGuidePosterProps> = ({
               “점수보다 더 빛나는 건 친구를 생각하는 따뜻한 마음! 오늘도 우리 반 수호천사 파이팅!”
             </div>
             <div className="text-[10.5px] font-semibold text-[#E7DED0]">
-              ※ 거짓 활동 기록은 안 돼요! 짝꿍이 ‘확인했어요’를 눌러 주어야 점수가 인정됩니다.
+              ※ 거짓 활동 기록은 안 돼요! 내가 챙겨줄 친구가 ‘확인했어요’를 눌러 주어야 점수가 인정됩니다.
             </div>
           </div>
         </div>

@@ -154,7 +154,7 @@ export const buildLetterRecords = (
         kindLabel: '1단계 첫 답장',
         raw: stu.openingReplyToTarget,
         receiver: myTarget,
-        receiverRoleLabel: '내가 챙기는 짝꿍',
+        receiverRoleLabel: '내가 챙겨줄 친구',
       },
       {
         kind: 'thank_letter',
@@ -170,7 +170,7 @@ export const buildLetterRecords = (
         kindLabel: '3단계 정체 공개 편지',
         raw: stu.revealLetterToTarget,
         receiver: myTarget,
-        receiverRoleLabel: '내가 챙기는 짝꿍',
+        receiverRoleLabel: '내가 챙겨줄 친구',
       },
     ];
 
@@ -226,7 +226,7 @@ export const makeLetterRecord = (
       kindLabel: '1단계 첫 답장',
       raw: sender.openingReplyToTarget,
       receiver: findTargetPartnerOf(sender.id, students),
-      receiverRoleLabel: '내가 챙기는 짝꿍',
+      receiverRoleLabel: '내가 챙겨줄 친구',
     },
     thank_letter: {
       stage: 3,
@@ -240,7 +240,7 @@ export const makeLetterRecord = (
       kindLabel: '3단계 정체 공개 편지',
       raw: sender.revealLetterToTarget,
       receiver: findTargetPartnerOf(sender.id, students),
-      receiverRoleLabel: '내가 챙기는 짝꿍',
+      receiverRoleLabel: '내가 챙겨줄 친구',
     },
   };
 
@@ -262,7 +262,7 @@ export const makeLetterRecord = (
 };
 
 /**
- * 편지 레코드에 대응하는 상대방의 짝꿍 편지/답장 레코드를 찾습니다.
+ * 편지 레코드에 대응하는 상대방의 편지/답장 레코드를 찾습니다.
  */
 export const findPairedLetterRecord = (
   record: TeacherLetterRecord,
@@ -315,8 +315,8 @@ export const formatStudentRecordSummaryText = (
 
   const lines: string[] = [
     `[${config.className}] ${formatStudentLabel(student, anonymize)} 활동 기록 (${anonymize ? '익명' : '실명'})`,
-    `- 내가 챙기는 짝꿍: ${formatStudentLabel(myTarget, anonymize)}`,
-    `- 나를 챙기는 수호천사: ${formatStudentLabel(myAngel, anonymize)}`,
+    `- 내가 챙겨줄 친구: ${formatStudentLabel(myTarget, anonymize)}`,
+    `- 나를 챙겨주는 수호천사: ${formatStudentLabel(myAngel, anonymize)}`,
     `- 총점: ${score.totalScore}점 (인증 ${score.verifiedSentCount}회 · 훈장 ${(student.medals || []).length}개)`,
     '',
     '1. 1단계 첫 편지 · 답장',
@@ -324,9 +324,9 @@ export const formatStudentRecordSummaryText = (
     maskBody(student.openingLetterToAngel),
     `[수호천사의 첫 답장 ← ${formatStudentLabel(myAngel, anonymize)}]`,
     maskBody(myAngel?.openingReplyToTarget),
-    `[짝꿍의 첫 편지 ← ${formatStudentLabel(myTarget, anonymize)}]`,
+    `[내가 챙겨줄 친구의 첫 편지 ← ${formatStudentLabel(myTarget, anonymize)}]`,
     maskBody(myTarget?.openingLetterToAngel),
-    `[보낸 첫 답장 → 짝꿍(${formatStudentLabel(myTarget, anonymize)})]`,
+    `[보낸 첫 답장 → 내가 챙겨줄 친구(${formatStudentLabel(myTarget, anonymize)})]`,
     maskBody(student.openingReplyToTarget),
     '',
     `2. 2단계 보낸 비밀 활동 (${sentMissions.length}건)`,
@@ -337,7 +337,7 @@ export const formatStudentRecordSummaryText = (
   } else {
     for (const m of sentMissions) {
       const replyText = m.reply?.trim()
-        ? ` | 짝꿍 한마디: "${maskTextNames(m.reply.trim(), students, anonymize)}"`
+        ? ` | 친구 한마디: "${maskTextNames(m.reply.trim(), students, anonymize)}"`
         : '';
       lines.push(
         `- [${m.dateKey} · ${getActivityTypeLabel(m.type)} · ${getMissionStatusLabel(m.status)}] ${maskTextNames(m.content, students, anonymize)}${replyText}`
@@ -376,9 +376,9 @@ export const formatStudentRecordSummaryText = (
     maskBody(student.thankLetterToAngel),
     `[수호천사가 보내온 정체 공개 편지 ← ${formatStudentLabel(myAngel, anonymize)}]`,
     maskBody(myAngel?.revealLetterToTarget),
-    `[짝꿍에게 쓴 정체 공개 편지 → ${formatStudentLabel(myTarget, anonymize)}]`,
+    `[내가 챙겨준 친구에게 쓴 정체 공개 편지 → ${formatStudentLabel(myTarget, anonymize)}]`,
     maskBody(student.revealLetterToTarget),
-    `[짝꿍이 보내온 감사 편지 ← ${formatStudentLabel(myTarget, anonymize)}]`,
+    `[내가 챙겨준 친구가 보내온 감사 편지 ← ${formatStudentLabel(myTarget, anonymize)}]`,
     maskBody(myTarget?.thankLetterToAngel)
   );
 
@@ -494,9 +494,9 @@ export const exportMissionsCsv = (
     '활동 유형',
     '주간 미션 내용',
     '보낸 학생(수호천사)',
-    '받은 학생(짝꿍)',
+    '받은 학생(챙김받는 친구)',
     '활동 내용',
-    '짝꿍 한마디',
+    '친구 한마디',
     '승인 상태',
     '점수',
   ];
@@ -551,7 +551,7 @@ export const exportAllRecordsCsv = (
     '보낸 학생',
     '받는 학생',
     '내용',
-    '짝꿍 한마디/답장',
+    '친구 한마디/답장',
     '상태/비고',
   ];
 
@@ -612,7 +612,7 @@ export const exportChatsCsv = (
   const studentById = new Map(students.map((s) => [s.id, s]));
   const headers = [
     '학급',
-    '대화방(수호천사→짝꿍)',
+    '대화방(수호천사→챙겨줄 친구)',
     '시각',
     '보낸 학생',
     '받는 학생',

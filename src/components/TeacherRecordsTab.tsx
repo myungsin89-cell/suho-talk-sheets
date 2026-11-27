@@ -292,10 +292,10 @@ export const TeacherRecordsTab: React.FC<TeacherRecordsTabProps> = ({
     const header = `[수호톡 1:1 대화] 수호천사 ${formatStudentLabel(
       angel,
       anonymize
-    )} ↔ 짝꿍 ${formatStudentLabel(target, anonymize)}`;
+    )} ↔ 챙겨줄 친구 ${formatStudentLabel(target, anonymize)}`;
     const lines = messages.map((m) => {
       const sender = studentById.get(m.senderId);
-      const role = angel && m.senderId === angel.id ? '수호천사' : '짝꿍';
+      const role = angel && m.senderId === angel.id ? '수호천사' : '챙겨줄 친구';
       return `[${m.createdAt}] ${formatStudentLabel(sender, anonymize)}(${role}): ${maskTextNames(
         m.content,
         students,
@@ -334,7 +334,7 @@ export const TeacherRecordsTab: React.FC<TeacherRecordsTabProps> = ({
     );
     const body = maskTextNames(m.content, students, anonymize);
     const replyLine = m.reply?.trim()
-      ? `\n짝꿍 한마디: "${maskTextNames(m.reply.trim(), students, anonymize)}"`
+      ? `\n친구 한마디: "${maskTextNames(m.reply.trim(), students, anonymize)}"`
       : '';
     const text = `[${m.dateKey} · ${getActivityTypeLabel(
       m.type,
@@ -466,7 +466,7 @@ export const TeacherRecordsTab: React.FC<TeacherRecordsTabProps> = ({
               총 {summaryStats.totalStudentMissions}건
             </div>
             <div className="text-[11px] font-semibold text-[#767676] mt-0.5">
-              짝꿍 승인 {summaryStats.verifiedMissions}건 · 한마디 답글 {summaryStats.withReplyCount}건
+              친구 승인 {summaryStats.verifiedMissions}건 · 한마디 답글 {summaryStats.withReplyCount}건
             </div>
           </div>
           <div className="w-10 h-10 rounded-xl bg-[#FFF5D6] flex items-center justify-center text-[#735020]">
@@ -625,7 +625,7 @@ export const TeacherRecordsTab: React.FC<TeacherRecordsTabProps> = ({
                   : 'bg-white text-[#767676] border-[#E5E7EB] hover:text-[#191919]'
               }`}
             >
-              짝꿍 한마디 있는 활동만
+              친구 한마디 있는 활동만
             </button>
           </div>
         ) : null}
@@ -808,7 +808,7 @@ export const TeacherRecordsTab: React.FC<TeacherRecordsTabProps> = ({
                   {m.reply && m.reply.trim() && (
                     <div className="rounded-lg bg-[#FFFBEB] border border-[#FDE68A] px-3 py-2 text-xs font-semibold text-[#3C1E1E]">
                       <span className="font-extrabold text-[#B45309]">
-                        짝꿍 한마디:
+                        친구 한마디:
                       </span>{' '}
                       “{maskTextNames(m.reply, students, anonymize)}”
                     </div>
@@ -847,7 +847,7 @@ export const TeacherRecordsTab: React.FC<TeacherRecordsTabProps> = ({
                     )}
                     <ArrowRight className="w-3.5 h-3.5 text-[#D97706]" />
                     <span className="px-2 py-0.5 rounded bg-[#F5F6F8] border border-[#E5E7EB] text-[#767676] text-[10px] font-extrabold">
-                      짝꿍
+                      챙겨줄 친구
                     </span>
                     {room.target ? (
                       <button
@@ -892,7 +892,7 @@ export const TeacherRecordsTab: React.FC<TeacherRecordsTabProps> = ({
                       >
                         <span className="text-[10px] font-bold text-[#475569] mb-0.5 px-1">
                           {formatStudentLabel(senderStu, anonymize)} (
-                          {isAngelMsg ? '수호천사' : '짝꿍'}) · {m.createdAt}
+                          {isAngelMsg ? '수호천사' : '챙겨줄 친구'}) · {m.createdAt}
                         </span>
                         <div
                           className={`max-w-[85%] rounded-2xl px-3 py-2 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-words ${

@@ -63,7 +63,7 @@ export const StudentChatView: React.FC<StudentChatViewProps> = ({
       : '나의 비밀 수호천사';
   const targetDisplayName = myTarget
     ? `${myTarget.number}번 ${myTarget.name}`
-    : '내가 챙기는 친구';
+    : '내가 챙겨줄 친구';
 
   useEffect(() => {
     onMarkRoomRead(activeRoom, currentIncomingCount);

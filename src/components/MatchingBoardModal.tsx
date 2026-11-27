@@ -195,7 +195,7 @@ export const MatchingBoardModal: React.FC<MatchingBoardModalProps> = ({
     fromSenderId?: string
   ) => {
     if (senderId === targetId) {
-      onNotify('자기 자신은 수호천사 짝꿍으로 지정할 수 없어요.');
+      onNotify('자기 자신은 챙겨줄 친구로 지정할 수 없어요.');
       return;
     }
     const sender = studentById.get(senderId);
@@ -215,17 +215,17 @@ export const MatchingBoardModal: React.FC<MatchingBoardModalProps> = ({
         updates[senderId] = targetId;
         updates[fromSenderId] = '';
         onNotify(
-          `${target.number}번 ${target.name} 학생을 ${sender.number}번 ${sender.name} 짝꿍으로 옮겼습니다.`
+          `${target.number}번 ${target.name} 학생을 ${sender.number}번 ${sender.name}의 챙겨줄 친구로 옮겼습니다.`
         );
       } else {
         updates[senderId] = targetId;
         if (prevTargetOfSender) {
           updates[fromSenderId] = prevTargetOfSender;
-          onNotify('두 학생의 짝꿍을 맞바꾸었습니다.');
+          onNotify('두 학생이 챙겨줄 친구를 맞바꾸었습니다.');
         } else {
           updates[fromSenderId] = '';
           onNotify(
-            `${target.number}번 ${target.name} 학생을 ${sender.number}번 ${sender.name} 짝꿍으로 옮겼습니다.`
+            `${target.number}번 ${target.name} 학생을 ${sender.number}번 ${sender.name}의 챙겨줄 친구로 옮겼습니다.`
           );
         }
       }
@@ -242,7 +242,7 @@ export const MatchingBoardModal: React.FC<MatchingBoardModalProps> = ({
         if (!senderAlreadyTakenByOther && targetHasNoPartner) {
           updates[targetId] = senderId;
           onNotify(
-            `${sender.number}번 ${sender.name} ↔ ${target.number}번 ${target.name} 서로 짝꿍으로 연결했습니다.`
+            `${sender.number}번 ${sender.name} ↔ ${target.number}번 ${target.name} 서로 매칭으로 연결했습니다.`
           );
         }
       }
@@ -298,7 +298,7 @@ export const MatchingBoardModal: React.FC<MatchingBoardModalProps> = ({
     ) {
       const onlyStu = unassignedSenders[0];
       onNotify(
-        `마지막 남은 ${onlyStu.number}번 ${onlyStu.name} 학생은 자기 자신만 남아 채울 수 없어요. 다른 학생 1명의 짝꿍을 ×로 비운 뒤 다시 눌러 주세요.`
+        `마지막 남은 ${onlyStu.number}번 ${onlyStu.name} 학생은 자기 자신만 남아 채울 수 없어요. 다른 학생 1명의 배정을 ×로 비운 뒤 다시 눌러 주세요.`
       );
       return;
     }
@@ -392,7 +392,7 @@ export const MatchingBoardModal: React.FC<MatchingBoardModalProps> = ({
                     <span>
                       전원 1:1 완료
                       {metrics.mutualPairsCount > 0
-                        ? ` · 서로 짝꿍 ${metrics.mutualPairsCount}쌍`
+                        ? ` · 서로 매칭 ${metrics.mutualPairsCount}쌍`
                         : ''}
                     </span>
                   </span>
@@ -420,7 +420,7 @@ export const MatchingBoardModal: React.FC<MatchingBoardModalProps> = ({
                 onChange={(e) => setMutualMode(e.target.checked)}
                 className="w-3.5 h-3.5 accent-[#3C1E1E]"
               />
-              <span>서로 짝꿍(A↔B) 동시 연결</span>
+              <span>서로 매칭(A↔B) 동시 연결</span>
             </label>
 
             {metrics.unassignedSenders.length > 0 && (
@@ -671,7 +671,7 @@ export const MatchingBoardModal: React.FC<MatchingBoardModalProps> = ({
                             {isDropActive
                               ? '여기에 놓기'
                               : isFocused
-                              ? '오른쪽에서 짝꿍 클릭 또는 드래그'
+                              ? '오른쪽에서 친구 클릭 또는 드래그'
                               : '빈 슬롯 (여기에 놓기)'}
                           </div>
                         )}

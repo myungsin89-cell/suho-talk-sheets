@@ -297,13 +297,13 @@ export const StudentRecordModal: React.FC<StudentRecordModalProps> = ({
 
         {/* 본문 스크롤 영역 */}
         <div className="flex-1 overflow-y-auto bg-[#F5F6F8] p-4 sm:p-6 space-y-5">
-          {/* 짝꿍 연결 & 요약 지표 카드 */}
+          {/* 수호천사 연결 & 요약 지표 카드 */}
           <section className="bg-white rounded-xl border border-[#E5E7EB] p-4 space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="rounded-lg bg-[#FFFBEB] border border-[#FDE68A] px-3.5 py-2.5 flex items-center justify-between gap-2">
                 <div>
                   <div className="text-[11px] font-bold text-[#735020]">
-                    내가 챙기는 짝꿍
+                    내가 챙겨줄 친구
                   </div>
                   <div className="text-sm font-black text-[#191919]">
                     {formatStudentLabel(myTarget, anonymize)}
@@ -315,7 +315,7 @@ export const StudentRecordModal: React.FC<StudentRecordModalProps> = ({
                     onClick={() => onSelectStudent(myTarget.id)}
                     className="px-2.5 py-1 rounded-md bg-white border border-[#E9D9AE] text-[11px] font-extrabold text-[#3C1E1E] hover:bg-[#FEE500]"
                   >
-                    짝꿍 기록 보기
+                    친구 기록 보기
                   </button>
                 )}
               </div>
@@ -433,15 +433,15 @@ export const StudentRecordModal: React.FC<StudentRecordModalProps> = ({
 
                 <div className="space-y-2.5">
                   {renderLetterBox(
-                    '내 짝꿍이 보낸 첫 편지',
-                    `보낸 짝꿍: ${formatStudentLabel(myTarget, anonymize)}`,
+                    '내가 챙겨줄 친구가 보낸 첫 편지',
+                    `보낸 친구: ${formatStudentLabel(myTarget, anonymize)}`,
                     myTarget?.openingLetterToAngel,
                     'cool',
                     makeLetterRecord(myTarget, 'opening_letter', students)
                   )}
                   {renderLetterBox(
-                    '내가 짝꿍에게 쓴 첫 답장',
-                    `받는 짝꿍: ${formatStudentLabel(myTarget, anonymize)}`,
+                    '내가 챙겨줄 친구에게 쓴 첫 답장',
+                    `받는 친구: ${formatStudentLabel(myTarget, anonymize)}`,
                     student.openingReplyToTarget,
                     'warm',
                     makeLetterRecord(student, 'opening_reply', students)
@@ -458,7 +458,7 @@ export const StudentRecordModal: React.FC<StudentRecordModalProps> = ({
                 <div className="flex items-center gap-2">
                   <Send className="w-4 h-4 text-[#3C1E1E]" />
                   <h4 className="text-sm font-black text-[#191919]">
-                    2단계 · 내가 짝꿍({formatStudentLabel(myTarget, anonymize)})에게 한 비밀 활동 ({sentMissions.length}건)
+                    2단계 · 내가 챙겨준 친구({formatStudentLabel(myTarget, anonymize)})에게 한 비밀 활동 ({sentMissions.length}건)
                   </h4>
                 </div>
               </div>
@@ -509,7 +509,7 @@ export const StudentRecordModal: React.FC<StudentRecordModalProps> = ({
                       {m.reply && m.reply.trim() && (
                         <div className="rounded-lg bg-white border border-[#E5E7EB] px-3 py-2 text-xs font-semibold text-[#191919]">
                           <span className="font-extrabold text-[#D97706]">
-                            짝꿍 한마디:
+                            친구 한마디:
                           </span>{' '}
                           “{maskTextNames(m.reply, students, anonymize)}”
                         </div>
@@ -649,15 +649,15 @@ export const StudentRecordModal: React.FC<StudentRecordModalProps> = ({
 
                 <div className="space-y-2.5">
                   {renderLetterBox(
-                    '내가 짝꿍에게 쓴 정체 공개 편지',
-                    `받는 짝꿍: ${formatStudentLabel(myTarget, anonymize)}`,
+                    '내가 챙겨준 친구에게 쓴 정체 공개 편지',
+                    `받는 친구: ${formatStudentLabel(myTarget, anonymize)}`,
                     student.revealLetterToTarget,
                     'warm',
                     makeLetterRecord(student, 'reveal_letter', students)
                   )}
                   {renderLetterBox(
-                    '짝꿍이 나에게 쓴 감사 편지',
-                    `보낸 짝꿍: ${formatStudentLabel(myTarget, anonymize)}`,
+                    '내가 챙겨준 친구가 나에게 쓴 감사 편지',
+                    `보낸 친구: ${formatStudentLabel(myTarget, anonymize)}`,
                     myTarget?.thankLetterToAngel,
                     'cool',
                     makeLetterRecord(myTarget, 'thank_letter', students)

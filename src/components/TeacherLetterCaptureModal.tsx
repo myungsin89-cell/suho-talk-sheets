@@ -103,7 +103,7 @@ export const TeacherLetterCaptureModal: React.FC<TeacherLetterCaptureModalProps>
       hamsterVariant: 'welcome' as const,
       badgeLabel: '마지막 감사 답장',
       toLabel: `${receiverLabel} (수호천사)`,
-      fromLabel: `${senderLabel} (내가 챙겨준 짝꿍)`,
+      fromLabel: `${senderLabel} (내가 챙겨준 친구)`,
     };
   };
 
@@ -174,10 +174,10 @@ export const TeacherLetterCaptureModal: React.FC<TeacherLetterCaptureModalProps>
                     ? 'bg-[#FFF5D6] text-[#735020] border-[#d7bc64]'
                     : 'bg-[#F5F6F8] hover:bg-gray-200 text-[#191919] border-[#E5E7EB]'
                 }`}
-                title="학생 화면 그대로의 비밀 호칭과 실제 짝꿍 이름 표기를 전환합니다"
+                title="학생 화면 그대로의 비밀 호칭과 실제 친구 이름 표기를 전환합니다"
               >
                 <Users className="w-3.5 h-3.5" />
-                <span>{studentScreenStyle ? '학생 화면 표기' : '짝꿍 이름 함께 표기'}</span>
+                <span>{studentScreenStyle ? '학생 화면 표기' : '친구 이름 함께 표기'}</span>
               </button>
             )}
 

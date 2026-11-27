@@ -12,7 +12,7 @@ export const findGuardianAngelOf = (
 };
 
 /**
- * 특정 학생이 챙겨주어야 하는 '나의 짝꿍(마니또 대상)' 학생 객체를 찾습니다.
+ * 특정 학생이 챙겨주어야 하는 '내가 챙겨줄 친구(마니또 대상)' 학생 객체를 찾습니다.
  */
 export const findTargetPartnerOf = (
   studentId: string,
@@ -125,7 +125,7 @@ export const calculateStudentScore = (
   const guessBonus = stage === 3 ? rawGuessBonus : 0;
 
   // 3-2. 정체 숨기기 성공 보너스 (+50점):
-  // 인증된 활동이 5회 이상이고 짝꿍이 나를 맞히지 못하면 정체 공개 후 +50점
+  // 인증된 활동이 5회 이상이고 내가 챙겨준 친구가 나를 맞히지 못하면 정체 공개 후 +50점
   const isStealthMasterEligible = verifiedSentCount >= 5;
   const targetGuessedStudentId = myTarget?.guessedAngelId || '';
   const wasCaughtByTarget = Boolean(
@@ -206,7 +206,7 @@ export const getStudentBadges = (
       id: 'badge-first-post',
       title: '설레는 첫 수호톡',
       subtitle: '첫 수호톡 발송 완료',
-      conditionText: '짝꿍을 위한 첫 수호톡 활동 보고하기',
+      conditionText: '내가 챙겨줄 친구를 위한 첫 수호톡 활동 보고하기',
       unlocked: mySentAll.length >= 1,
       variant: 'welcome',
     },
@@ -214,7 +214,7 @@ export const getStudentBadges = (
       id: 'badge-quest-star',
       title: '황금 별 미션 해결사',
       subtitle: '선생님의 주간 미션 인증',
-      conditionText: '주간 미션 달성 후 짝꿍에게 인증받기',
+      conditionText: '주간 미션 달성 후 친구에게 확인받기',
       unlocked: score.questCount >= 1,
       variant: 'quest',
     },
@@ -246,7 +246,7 @@ export const getStudentBadges = (
       id: 'badge-forest-master',
       title: '수호톡 명예 스탬프',
       subtitle: '마지막 편지 2통 완주',
-      conditionText: '수호천사 감사 편지 & 짝꿍 정체 공개 편지 2통 모두 작성하기',
+      conditionText: '수호천사 감사 편지 & 정체 공개 편지 2통 모두 작성하기',
       unlocked: score.letterBonus === 30,
       variant: 'stamp',
     },

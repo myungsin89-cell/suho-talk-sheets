@@ -119,7 +119,7 @@ const SentMissionCard: React.FC<{ mission: MissionLog }> = ({ mission: m }) => (
     </p>
     {m.reply && (
       <div className="rounded-lg bg-white border border-[#E9D9AE] px-2 py-0.5 text-[10px] font-bold text-[#735020] truncate">
-        짝꿍 답장: “{m.reply}”
+        친구 답장: “{m.reply}”
       </div>
     )}
   </div>
@@ -264,7 +264,7 @@ export const WorkbookPrintSheet: React.FC<WorkbookPrintSheetProps> = ({
           }`}
         >
           <div className="flex items-center justify-between gap-1 text-[10px] font-extrabold text-[#1B4D3E] mb-1">
-            <span>내 짝꿍이 보낸 첫 편지</span>
+            <span>내가 챙겨준 친구가 보낸 첫 편지</span>
             <span className="text-[#4A6B57] shrink-0">From. {targetDisplayName}</span>
           </div>
           <p
@@ -282,7 +282,7 @@ export const WorkbookPrintSheet: React.FC<WorkbookPrintSheetProps> = ({
           }`}
         >
           <div className="flex items-center justify-between gap-1 text-[10px] font-extrabold text-[#3C1E1E] mb-1">
-            <span>내가 짝꿍에게 보낸 첫 답장</span>
+            <span>내가 챙겨준 친구에게 보낸 첫 답장</span>
             <span className="text-[#75675d] shrink-0">To. {targetDisplayName}</span>
           </div>
           <p
@@ -333,7 +333,7 @@ export const WorkbookPrintSheet: React.FC<WorkbookPrintSheetProps> = ({
           <div className="rounded-2xl bg-[#FFF9F8] border-2 border-[#F3D2CA] p-3 flex flex-col overflow-hidden">
             <div className="flex items-center justify-between gap-1 border-b border-dashed border-[#F3D2CA] pb-1.5 mb-1.5 shrink-0">
               <span className="text-[11px] font-black text-[#9F1239]">
-                내 짝꿍의 감사 편지
+                내가 챙겨준 친구의 감사 편지
               </span>
               <span className="text-[10px] font-bold text-[#9F1239] shrink-0">
                 From. {targetDisplayName}
@@ -363,7 +363,7 @@ export const WorkbookPrintSheet: React.FC<WorkbookPrintSheetProps> = ({
           <div className="rounded-2xl bg-white border-2 border-[#E2D6C5] p-3 flex flex-col overflow-hidden">
             <div className="flex items-center justify-between gap-1 border-b border-dashed border-[#E2D6C5] pb-1.5 mb-1.5 shrink-0">
               <span className="text-[11px] font-black text-[#3C1E1E]">
-                내가 짝꿍에게 쓴 정체 공개 편지
+                내가 챙겨준 친구에게 쓴 정체 공개 편지
               </span>
               <span className="text-[10px] font-bold text-[#735020] shrink-0">
                 To. {targetDisplayName}
@@ -371,7 +371,7 @@ export const WorkbookPrintSheet: React.FC<WorkbookPrintSheetProps> = ({
             </div>
             <p className={`text-[#2D201A] whitespace-pre-wrap ${clampClass}`}>
               {student.revealLetterToTarget?.trim() ||
-                '짝꿍에게 남긴 정체 공개 편지가 없어요.'}
+                '내가 챙겨준 친구에게 남긴 정체 공개 편지가 없어요.'}
             </p>
           </div>
         </div>
@@ -419,7 +419,7 @@ export const WorkbookPrintSheet: React.FC<WorkbookPrintSheetProps> = ({
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-[10.5px] font-extrabold text-[#735020]">
-                  내가 몰래 챙겨준 소중한 짝꿍
+                  내가 몰래 챙겨준 소중한 친구
                 </div>
                 <div className="text-[15px] font-black text-[#2D201A] truncate mt-0.5">
                   {targetDisplayName}
@@ -789,7 +789,7 @@ export const WorkbookPrintSheet: React.FC<WorkbookPrintSheetProps> = ({
 
               <div className="grid grid-cols-4 gap-2 text-center">
                 <div className="rounded-xl bg-[#FFFDF4] border border-[#F3DF9C] px-2 py-2">
-                  <div className="text-[10px] font-bold text-[#735020]">내가 챙긴 짝꿍</div>
+                  <div className="text-[10px] font-bold text-[#735020]">내가 챙겨준 친구</div>
                   <div className="text-[13px] font-black text-[#2D201A] mt-0.5 truncate">
                     {targetDisplayName}
                   </div>

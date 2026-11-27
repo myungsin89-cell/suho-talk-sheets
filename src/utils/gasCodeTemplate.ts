@@ -72,7 +72,7 @@ function setupSheets() {
     cfgSheet.appendRow(['key', 'value']);
     cfgSheet.getRange(1, 1, 1, 2).setFontWeight('bold').setBackground('#E8F3EC');
     cfgSheet.appendRow(['className', '4학년 2반 수호톡']);
-    cfgSheet.appendRow(['weeklyQuest', '이번 주 짝꿍의 옷차림이나 멋진 점 1가지를 찾아 칭찬해 주기']);
+    cfgSheet.appendRow(['weeklyQuest', '이번 주 챙겨줄 친구의 옷차림이나 멋진 점 1가지를 찾아 칭찬해 주기']);
     cfgSheet.appendRow(['stage', '1']);
   }
 }
@@ -172,7 +172,7 @@ function readAllData() {
   const cfgRows = ss.getSheetByName(SHEET_CONFIG).getDataRange().getValues();
   const config = {
     className: '4학년 2반 수호톡',
-    weeklyQuest: '이번 주 짝꿍의 멋진 점 1가지 칭찬하기',
+    weeklyQuest: '이번 주 챙겨줄 친구의 멋진 점 1가지 칭찬하기',
     stage: 1
   };
   for (let i = 1; i < cfgRows.length; i++) {

@@ -692,7 +692,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
             {!identityRevealed && myTarget && (
               <button type="button" onClick={handleToggleTargetName} aria-expanded={showTargetName} className="suho-secondary px-2.5 text-sm">
                 {showTargetName ? <EyeOff size={16} aria-hidden="true" /> : <Lock size={16} aria-hidden="true" />}
-                {showTargetName ? '숨기기' : '짝꿍 확인'}
+                {showTargetName ? '숨기기' : '내가 챙겨줄 친구'}
               </button>
             )}
             {onLogout && (
@@ -878,7 +878,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
                     <div className="min-w-0">
                       <p className="text-sm font-bold text-[#735020]">준비 중</p>
                       <h2 className="mt-2 break-keep text-xl font-black leading-snug tracking-tight sm:text-3xl">
-                        선생님이 짝꿍을 배정하고 있어요
+                        선생님이 내가 챙겨줄 친구를 배정하고 있어요
                       </h2>
                     </div>
                     <SuhoHamster variant="welcome" size={76} className="shrink-0 sm:scale-125 sm:mr-2" />
@@ -1098,7 +1098,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
                           {config.stage === 2 ? '도운 일 남기기' : '내가 보낸 활동'}
                         </h2>
                         <p className="break-keep text-[11.5px] sm:text-sm font-medium text-[#604832] leading-snug">
-                          짝꿍을 몰래 챙겨준 일을 기록해요
+                          내가 챙겨줄 친구를 몰래 도운 일을 기록해요
                         </p>
                       </div>
                     </div>
@@ -1418,7 +1418,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
 
         {page === 'mission' && config.stage === 2 && (
           <div className="space-y-4">
-            {/* 1. 짝꿍 미션 인증 신청 폼 */}
+            {/* 1. 친구 미션 인증 신청 폼 */}
             <section className="bg-white rounded-xl border border-[#E5E7EB] p-5 shadow-sm">
               <form onSubmit={handleReportSubmit} className="space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -1537,7 +1537,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
 
                 {!myTarget && (
                   <div className="bg-[#FFFBEB] border border-[#FDE68A] text-[#B45309] rounded-lg px-3 py-2 text-xs font-bold">
-                    선생님이 아직 수호천사 짝꿍을 배정 중이에요.
+                    선생님이 아직 내가 챙겨줄 친구를 배정 중이에요.
                   </div>
                 )}
 
@@ -1614,14 +1614,14 @@ export const StudentView: React.FC<StudentViewProps> = ({
 
                         {m.status === 'hold' && (
                           <div className="text-[11px] font-medium text-rose-700">
-                            짝꿍이 잘 모르겠다고 해요. 다음엔 조금 더 분명하게 마음을 전해 보세요!
+                            내가 챙겨줄 친구가 잘 모르겠다고 해요. 다음엔 조금 더 분명하게 마음을 전해 보세요!
                           </div>
                         )}
 
                         {m.status === 'verified' &&
                           (m.reply ? (
                             <p className="text-xs text-[#767676] border-l-2 border-[#FEE500] pl-2.5 mt-1">
-                              짝꿍: “{m.reply}”
+                              내가 챙겨줄 친구: “{m.reply}”
                             </p>
                           ) : (
                             <div className="text-[11px] text-[#767676]">
@@ -1656,7 +1656,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
                   친구였어요!
                 </h2>
                 <p className="text-xs text-[#767676] mt-1">
-                  내가 몰래 챙겨준 짝꿍은{' '}
+                  내가 몰래 챙겨준 친구는{' '}
                   <strong className="text-[#191919]">
                     {myTarget ? `${myTarget.number}번 ${myTarget.name}` : '-'}
                   </strong>
@@ -1720,12 +1720,12 @@ export const StudentView: React.FC<StudentViewProps> = ({
                     {!score.isStealthMasterEligible
                       ? `인증 미션 ${score.verifiedSentCount}회(5회 미만)로 보너스 0점`
                       : score.wasCaughtByTarget
-                      ? `앗! 짝꿍(${myTarget?.name})에게 정체를 들켰어요!`
+                      ? `앗! 내가 챙겨준 친구(${myTarget?.name})에게 정체를 들켰어요!`
                       : `완벽 방어! ${score.verifiedSentCount}회 미션을 수행하고도 안 들켰어요!`}
                   </p>
                 </div>
                 <div className="bg-[#F5F6F8] rounded-lg px-3 py-2 text-xs text-[#767676] flex justify-between">
-                  <span>짝꿍({myTarget?.name})의 지목</span>
+                  <span>내가 챙겨준 친구({myTarget?.name})의 지목</span>
                   <strong className="text-[#191919]">
                     {targetGuessedStudent
                       ? `${targetGuessedStudent.number}번 ${targetGuessedStudent.name}`
@@ -1792,7 +1792,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
                       <div className="flex items-center gap-2 min-w-0">
                         <Feather className="w-4 h-4 text-[#3C1E1E] shrink-0" />
                         <h3 className="text-sm font-extrabold text-[#191919] truncate">
-                          내 짝꿍({myTarget.number}번 {myTarget.name})의 감사 답장
+                          내가 챙겨준 친구({myTarget.number}번 {myTarget.name})의 감사 편지
                         </h3>
                       </div>
                       {targetThankLetter && (
@@ -1802,10 +1802,10 @@ export const StudentView: React.FC<StudentViewProps> = ({
                             setActiveLetterModal({
                               id: 'thank_letter',
                               theme: 'rose',
-                              arrivalTitle: `내 짝꿍(${myTarget.number}번 ${myTarget.name})의 감사 답장`,
-                              badgeLabel: '마지막 감사 답장',
+                              arrivalTitle: `내가 챙겨준 친구(${myTarget.number}번 ${myTarget.name})의 감사 편지`,
+                              badgeLabel: '마지막 감사 편지',
                               toLabel: `${student.number}번 ${student.name} (수호천사)`,
-                              fromLabel: `${myTarget.number}번 ${myTarget.name} (내가 챙겨준 짝꿍)`,
+                              fromLabel: `${myTarget.number}번 ${myTarget.name} (내가 챙겨준 친구)`,
                               content: targetThankLetter,
                               hamsterVariant: 'welcome',
                               startOpened: false,
@@ -1820,7 +1820,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
                     </div>
                     <div className="letter-paper-rose border border-[#F3D2CA] rounded-lg px-4 py-2 text-sm text-[#2B2118] whitespace-pre-wrap">
                       {targetThankLetter ||
-                        '짝꿍이 아직 감사 답장을 작성하지 않았어요.'}
+                        '내가 챙겨준 친구가 아직 감사 편지를 작성하지 않았어요.'}
                     </div>
                     {(student.revealLetterToTarget || '').trim() && (
                       <div className="bg-white/90 border border-[#F3D2CA]/70 rounded-lg p-3 text-xs text-[#191919] space-y-1">
@@ -1887,7 +1887,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
                   <div className="bg-[#FFFBF9] border border-[#F3D2CA] rounded-lg p-3.5 space-y-2">
                     <div className="flex items-center justify-between gap-2">
                       <span className="font-extrabold text-[#191919]">
-                        짝꿍({myTarget?.name || '짝꿍'})의 첫 편지 · 내 답장
+                        내가 챙겨준 친구({myTarget?.name || '친구'})의 첫 편지 · 내 답장
                       </span>
                       {targetOpeningLetter && (
                         <button
@@ -1896,12 +1896,12 @@ export const StudentView: React.FC<StudentViewProps> = ({
                             setActiveLetterModal({
                               id: 'opening_letter',
                               theme: 'warm',
-                              arrivalTitle: `${myTarget?.name || '짝꿍'}의 첫 편지`,
-                              badgeLabel: '짝꿍의 첫 편지',
+                              arrivalTitle: `${myTarget?.name || '내가 챙겨준 친구'}의 첫 편지`,
+                              badgeLabel: '친구의 첫 편지',
                               toLabel: `${student.number}번 ${student.name} (수호천사)`,
                               fromLabel: myTarget
                                 ? `${myTarget.number}번 ${myTarget.name}`
-                                : '내 짝꿍',
+                                : '내가 챙겨준 친구',
                               content: targetOpeningLetter,
                               hamsterVariant: 'welcome',
                               startOpened: false,
@@ -1944,7 +1944,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
                       <p className="font-medium">{m.content}</p>
                       {m.reply && (
                         <p className="text-[#3C1E1E]/75 mt-1">
-                          짝꿍 한마디: “{m.reply}”
+                          친구 한마디: “{m.reply}”
                         </p>
                       )}
                     </div>
@@ -2117,7 +2117,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
             <div className="space-y-2.5 text-xs sm:text-sm">
               <div className="bg-[#F5F6F8] rounded-lg p-3.5 space-y-1.5">
                 <div className="font-extrabold text-[#191919] border-b border-[#E5E7EB] pb-1.5 flex justify-between">
-                  <span>1. 수호천사 활동 점수 (짝꿍 인증)</span>
+                  <span>1. 수호천사 활동 점수 (친구 확인)</span>
                   <span>+{score.activitySubtotal}점</span>
                 </div>
                 <div className="flex justify-between text-xs text-[#767676]">
@@ -2150,7 +2150,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
                   </span>
                 </div>
                 <div className="flex justify-between text-xs text-[#767676]">
-                  <span>· 짝꿍에게 수호천사 첫 답장 (5자↑)</span>
+                  <span>· 내가 챙겨줄 친구에게 첫 답장 (5자↑)</span>
                   <span className="font-bold text-[#191919]">
                     {score.hasOpeningReply ? '+15점' : '0점'}
                   </span>

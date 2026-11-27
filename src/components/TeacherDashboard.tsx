@@ -753,12 +753,12 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
         <main className="max-w-5xl mx-auto px-4 sm:px-6 py-7 space-y-6 no-print">
           <section className="rounded-2xl border border-[#e9d9ae] bg-[#fff5d6] p-5 sm:p-6">
             <h1 className="text-xl font-black tracking-tight sm:text-2xl">수호톡 수업 준비</h1>
-            <p className="mt-1 text-sm leading-relaxed text-[#685852]">명단을 등록하고 짝꿍을 배정한 뒤, 학생에게 입장 방법을 안내하세요.</p>
+            <p className="mt-1 text-sm leading-relaxed text-[#685852]">명단을 등록하고 챙겨줄 친구를 배정한 뒤, 학생에게 입장 방법을 안내하세요.</p>
             <ol className="mt-4 grid gap-2.5 sm:grid-cols-3">
               {[
                 { id: 'student-roster', title: '1. 명단 등록', status: students.length >= 2 ? `${students.length}명 등록됨` : '학생 2명 이상 필요', current: students.length < 2 },
-                { id: 'partner-matching', title: '2. 짝꿍 배정', status: matchingMetrics.isComplete1to1 ? '전원 배정됨' : `${matchingMetrics.assignedCount}/${students.length}명 배정`, current: students.length >= 2 && !matchingMetrics.isComplete1to1 },
-                { id: 'student-invites', title: '3. 학생 초대', status: matchingMetrics.isComplete1to1 ? '입장 카드와 QR 공유' : '짝꿍 배정 후 안내', current: matchingMetrics.isComplete1to1 },
+                { id: 'partner-matching', title: '2. 친구 배정', status: matchingMetrics.isComplete1to1 ? '전원 배정됨' : `${matchingMetrics.assignedCount}/${students.length}명 배정`, current: students.length >= 2 && !matchingMetrics.isComplete1to1 },
+                { id: 'student-invites', title: '3. 학생 초대', status: matchingMetrics.isComplete1to1 ? '입장 카드와 QR 공유' : '친구 배정 후 안내', current: matchingMetrics.isComplete1to1 },
               ].map((step) => (
                 <li key={step.id}>
                   <a href={`#${step.id}`} aria-current={step.current ? 'step' : undefined}
@@ -951,12 +951,12 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
               </section>
             </div>
 
-            {/* 우측: 수호천사 매칭 설정 (직접 선택 + 랜덤 + 서로 짝꿍 허용) */}
+            {/* 우측: 수호천사 매칭 설정 (직접 선택 + 랜덤 + 서로 매칭 허용) */}
             <section id="partner-matching" className="lg:col-span-6 bg-white rounded-xl p-5 shadow-sm border border-[#E5E7EB] space-y-4">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
                   <h3 className="text-base font-extrabold text-[#191919]">
-                    2. 짝꿍 배정
+                    2. 챙겨줄 친구 배정
                   </h3>
                   <p className="text-xs text-[#767676] mt-0.5">
                     처음에는 자동으로 배정하고, 직접 정하려면 매칭 보드를 열어 주세요.
@@ -1006,7 +1006,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                       <span>
                         전원 1:1 매칭 완료
                         {matchingMetrics.mutualPairsCount > 0
-                          ? ` · 서로 짝꿍 ${matchingMetrics.mutualPairsCount}쌍`
+                          ? ` · 서로 매칭 ${matchingMetrics.mutualPairsCount}쌍`
                           : ''}
                       </span>
                     </span>
@@ -1091,7 +1091,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                               </span>
                               {isMutual && (
                                 <span className="px-1.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-extrabold shrink-0">
-                                  서로 짝꿍
+                                  서로 매칭
                                 </span>
                               )}
                             </div>
@@ -1099,7 +1099,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                             <div className="flex items-center gap-2 shrink-0">
                               <span className="text-[#767676] font-bold">➔</span>
                               <select
-                                aria-label={`${stu.name} 짝꿍 선택`}
+                                aria-label={`${stu.name} 챙겨줄 친구 선택`}
                                 value={stu.targetId}
                                 onChange={(e) =>
                                   onUpdateStudentTarget(stu.id, e.target.value)
@@ -1141,7 +1141,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
             <p className="mt-1 text-sm leading-relaxed text-[#685852]">
               {matchingMetrics.isComplete1to1
                 ? '학급 링크나 QR을 안내하고, 각 학생에게 본인의 입장 코드를 건네 주세요.'
-                : '짝꿍 배정을 마친 뒤 접속 링크와 개인 입장 코드를 안내하세요.'}
+                : '친구 배정을 마친 뒤 접속 링크와 개인 입장 코드를 안내하세요.'}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <button type="button" onClick={() => setShowLoginSlipsModal(true)} disabled={!students.length}
@@ -1556,7 +1556,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
             {canCheckMissions && pendingMissionsCount > 0 && (
               <div className="bg-[#FFFBEB] border border-[#FDE68A] rounded-lg px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
                 <span className="text-xs text-[#3C1E1E]">
-                  짝꿍이 아직 승인하지 않은 미션이{' '}
+                  받는 친구가 아직 확인하지 않은 미션이{' '}
                   <strong className="text-[#B45309]">
                     {pendingMissionsCount}건
                   </strong>{' '}
@@ -1567,14 +1567,14 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                   onClick={() => {
                     onApproveAllPending();
                     showToast(
-                      `짝꿍 미확인 미션 ${pendingMissionsCount}건을 교사 대신 승인했습니다.`
+                      `미확인 미션 ${pendingMissionsCount}건을 교사 대신 승인했습니다.`
                     );
                   }}
                   className="px-3 py-1.5 rounded-lg bg-[#FEE500] hover:bg-[#F5DC00] text-[#3C1E1E] text-xs font-black flex items-center gap-1.5 shrink-0"
                 >
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>
-                    짝꿍 미확인 미션 교사 대신 승인 ({pendingMissionsCount}건)
+                    미확인 미션 교사 대신 승인 ({pendingMissionsCount}건)
                   </span>
                 </button>
               </div>
@@ -2366,7 +2366,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                         <ArrowRight className="w-4 h-4 text-[#D97706]" />
                         <div className="text-right">
                           <span className="text-[11px] text-[#767676] block">
-                            챙김 받은 짝꿍
+                            수호천사가 챙겨준 친구
                           </span>
                           <span className="font-black text-sm text-[#191919]">
                             {stu.number}번 {stu.name}
