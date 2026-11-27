@@ -601,23 +601,6 @@ export const StudentView: React.FC<StudentViewProps> = ({
   const openLetter = (letter: ArrivedLetterData) =>
     setActiveLetterModal({ ...letter, startOpened: isLetterRead(letter) });
 
-  type HomeAction = { title: string; detail: string; label: string; run: () => void };
-  const openInbox: HomeAction = {
-    title: '친구가 도와준 일을 확인해 주세요',
-    detail: `내가 확인해야 할 비밀 활동이 ${pendingReceivedCount}건 있어요.`,
-    label: '받은 소식 보기', run: () => goTo('inbox'),
-  };
-  const startMission: HomeAction = {
-    title: '친구를 도운 일을 남겨요', detail: '몰래 챙겨주거나 마음을 전한 일이 있다면 적어 보세요.',
-    label: '도운 일 남기기',
-    run: () => { setSelectedActivity('stealth'); goTo('mission'); },
-  };
-  const weeklyMission: HomeAction = {
-    title: '선생님이 올린 주간 미션', detail: config.weeklyQuest || '',
-    label: '주간 미션 기록하기',
-    run: () => { setSelectedActivity('quest'); goTo('mission'); },
-  };
-
   const finalActions = [
     { title: '나의 수호천사 추리하기', detail: '나를 챙겨준 것 같은 친구 한 명을 골라 보세요.',
       label: student.guessedAngelId ? '추리 수정' : '추리하기', page: 'guess', done: Boolean(student.guessedAngelId) },
@@ -626,17 +609,6 @@ export const StudentView: React.FC<StudentViewProps> = ({
     { title: '나를 챙겨준 수호천사에게 감사 편지 쓰기', detail: '수호천사에게 고마웠던 일을 적어 보세요.',
       label: thankDone ? '편지 수정' : '편지 쓰기', page: 'final-thank', done: thankDone },
   ] as const;
-
-  let stage2HomeAction: HomeAction | null = null;
-  if (config.stage === 2 && ready) {
-    if (hasWeeklyQuest && dailyLimit.canSendQuest) {
-      stage2HomeAction = weeklyMission;
-    } else if (pendingReceivedCount > 0) {
-      stage2HomeAction = openInbox;
-    } else if (dailyLimit.canSendRegular) {
-      stage2HomeAction = startMission;
-    }
-  }
 
   React.useEffect(() => {
     onChatActiveChange?.(page === 'chat');
@@ -1093,51 +1065,141 @@ export const StudentView: React.FC<StudentViewProps> = ({
                   </p>
                 )}
 
-                {config.stage === 2 && (
-                  <section className="relative overflow-hidden rounded-[22px] border border-[#e9d9ae] bg-[#fff3c9] p-5 sm:p-8">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="text-sm font-bold text-[#735020]">선생님이 연 활동 · 비밀 활동</p>
-                        {stage2HomeAction && <p className="mt-4 text-sm font-extrabold text-[#735020]">지금 할 일</p>}
-                        <h2 className="mt-1 break-keep text-xl font-black leading-snug tracking-tight sm:text-3xl">
-                          {stage2HomeAction?.title ?? '오늘 비밀 활동을 다 했어요'}
-                        </h2>
+                {/* 2단계 메인: 도운 일 남기기 & 확인할 일 보기 2열 카드 */}
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (config.stage === 2) {
+                        setSelectedActivity('stealth');
+                        goTo('mission');
+                      } else {
+                        goTo('records');
+                      }
+                    }}
+                    className="rounded-[22px] border-2 border-[#e9d9ae] bg-[#fff5d6] hover:bg-[#fee500]/55 hover:border-[#8c650c] transition-all text-left p-3.5 sm:p-5 flex flex-col justify-between gap-3 shadow-xs min-w-0"
+                  >
+                    <div className="space-y-2.5">
+                      <div className="flex flex-wrap items-start justify-between gap-1.5">
+                        <SuhoHamster variant="stealth" angelStyle="boy" size={48} className="shrink-0" />
+                        <span className="rounded-full bg-white/90 border border-[#e9d9ae] px-2 py-0.5 text-[10.5px] sm:text-xs font-black text-[#735020]">
+                          {config.stage === 2
+                            ? dailyLimit.canSendRegular
+                              ? `오늘 ${dailyLimit.remainingRegularToday}/2회`
+                              : '오늘 완료'
+                            : `보낸 활동 ${mySentMissions.length}건`}
+                        </span>
                       </div>
-                      <SuhoHamster variant="welcome" size={76} className="shrink-0 sm:scale-125 sm:mr-2" />
+                      <div className="space-y-1">
+                        <p className="text-[11px] sm:text-xs font-extrabold text-[#735020]">
+                          내가 수호천사로서
+                        </p>
+                        <h2 className="break-keep text-base sm:text-xl font-black text-[#2d201a] leading-snug">
+                          {config.stage === 2 ? '도운 일 남기기' : '내가 보낸 활동'}
+                        </h2>
+                        <p className="break-keep text-[11.5px] sm:text-sm font-medium text-[#604832] leading-snug">
+                          짝꿍을 몰래 챙겨준 일을 기록해요
+                        </p>
+                      </div>
                     </div>
-                    <p className="mt-3 max-w-md text-base leading-relaxed text-[#604832]">
-                      {stage2HomeAction?.detail ?? '내 기록과 받은 소식은 아래에서 다시 볼 수 있어요.'}
-                    </p>
-                    {stage2HomeAction && (
-                      <button type="button" className="suho-primary mt-4 w-full sm:w-auto" onClick={stage2HomeAction.run}>
-                        {stage2HomeAction.label} <ChevronRight size={19} aria-hidden="true" />
+
+                    <span className="w-full rounded-xl bg-[#fee500] text-[#2d201a] font-black text-xs sm:text-sm py-2.5 px-3 flex items-center justify-between gap-1">
+                      <span className="truncate">
+                        {config.stage === 2 ? '도운 일 기록하기' : '보낸 기록 보기'}
+                      </span>
+                      <ChevronRight size={17} className="shrink-0" aria-hidden="true" />
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => goTo('inbox')}
+                    className={`rounded-[22px] border-2 transition-all text-left p-3.5 sm:p-5 flex flex-col justify-between gap-3 shadow-xs min-w-0 ${
+                      pendingReceivedCount > 0
+                        ? 'border-emerald-400 bg-[#eefaf3] hover:bg-[#e1f6ea] hover:border-emerald-600'
+                        : 'border-[#dce6df] bg-white hover:bg-[#f5faf7] hover:border-emerald-400'
+                    }`}
+                  >
+                    <div className="space-y-2.5">
+                      <div className="flex flex-wrap items-start justify-between gap-1.5">
+                        <SuhoHamster variant="heart" angelStyle="girl" size={48} className="shrink-0" />
+                        {pendingReceivedCount > 0 ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-red-600 px-2.5 py-0.5 text-[10.5px] sm:text-xs font-black text-white shadow-xs">
+                            <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" aria-hidden="true" />
+                            확인할 일 {pendingReceivedCount}건
+                          </span>
+                        ) : (
+                          <span className="rounded-full bg-[#eef7f1] border border-[#b7dbc5] px-2 py-0.5 text-[10.5px] sm:text-xs font-black text-[#1B4D3E]">
+                            확인 완료
+                          </span>
+                        )}
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-[11px] sm:text-xs font-extrabold text-[#1B4D3E]">
+                          수호천사에게 받은 도움
+                        </p>
+                        <h2 className="break-keep text-base sm:text-xl font-black text-[#2d201a] leading-snug">
+                          확인할 일 보기
+                        </h2>
+                        <p className="break-keep text-[11.5px] sm:text-sm font-medium text-[#4a5d52] leading-snug">
+                          {pendingReceivedCount > 0
+                            ? `확인해야 할 활동이 ${pendingReceivedCount}건 있어요!`
+                            : '수호천사가 남긴 활동과 편지를 봐요'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <span
+                      className={`w-full rounded-xl font-black text-xs sm:text-sm py-2.5 px-3 flex items-center justify-between gap-1 ${
+                        pendingReceivedCount > 0
+                          ? 'bg-[#1B4D3E] text-white'
+                          : 'bg-[#eef7f1] border border-[#b7dbc5] text-[#1B4D3E]'
+                      }`}
+                    >
+                      <span className="truncate">
+                        {pendingReceivedCount > 0 ? '지금 확인하기' : '받은 소식 보기'}
+                      </span>
+                      <ChevronRight size={17} className="shrink-0" aria-hidden="true" />
+                    </span>
+                  </button>
+                </div>
+
+                {/* 주간 특별 미션 배너 (열려 있을 때만) */}
+                {config.stage === 2 && hasWeeklyQuest && (
+                  <section className="rounded-2xl border border-[#e9d9ae] bg-white p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3 shadow-xs">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <SuhoHamster variant="quest" size={44} className="shrink-0" />
+                      <div className="min-w-0">
+                        <div className="inline-flex items-center gap-1.5 text-[11px] font-black text-[#B45309]">
+                          <Sparkles size={13} aria-hidden="true" />
+                          <span>선생님이 올린 주간 특별 미션 · +25점</span>
+                        </div>
+                        <p className="text-sm sm:text-base font-extrabold text-[#2d201a] mt-0.5 break-words">
+                          {config.weeklyQuest}
+                        </p>
+                      </div>
+                    </div>
+                    {dailyLimit.canSendQuest ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedActivity('quest');
+                          goTo('mission');
+                        }}
+                        className="suho-primary text-xs sm:text-sm w-full sm:w-auto shrink-0"
+                      >
+                        <span>주간 미션 기록하기</span>
+                        <ChevronRight size={16} aria-hidden="true" />
                       </button>
+                    ) : (
+                      <span className="rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-black text-emerald-700 shrink-0">
+                        주간 미션 참여 완료
+                      </span>
                     )}
                   </section>
                 )}
 
-                <nav aria-label="2단계 활동 메뉴" className="suho-sheet divide-y divide-[#e7ded0] px-4 sm:px-5">
-                  {config.stage === 2 && (
-                    <button type="button" onClick={startMission.run} className="flex min-h-14 w-full items-center gap-3 py-2 text-left font-extrabold hover:text-[#735020]">
-                      <ClipboardCheck size={21} aria-hidden="true" />
-                      <div className="flex-1 min-w-0">
-                        <div>친구를 도운 일 기록하기</div>
-                        <div className="text-xs font-medium text-[#75675d]">
-                          오늘 일반 활동 {dailyLimit.remainingRegularToday}/2회 남음
-                        </div>
-                      </div>
-                      <ChevronRight size={18} aria-hidden="true" />
-                    </button>
-                  )}
-                  <button type="button" onClick={() => goTo('inbox')} className="flex min-h-14 w-full items-center gap-3 py-2 text-left font-extrabold hover:text-[#735020]">
-                    <MailOpen size={21} aria-hidden="true" /> <span className="flex-1">받은 비밀 활동 확인하기</span>
-                    {pendingReceivedCount > 0 && (
-                      <span className="rounded-full bg-[#fff3c9] px-2.5 py-1 text-xs font-extrabold text-[#694310]">
-                        확인 대기 {pendingReceivedCount}건
-                      </span>
-                    )}
-                    <ChevronRight size={18} aria-hidden="true" />
-                  </button>
+                <nav aria-label="2단계 활동 메뉴" className="suho-sheet px-4 sm:px-5">
                   <button type="button" onClick={() => goTo('records')} className="flex min-h-14 w-full items-center gap-3 py-2 text-left font-extrabold hover:text-[#735020]">
                     <Trophy size={21} aria-hidden="true" /> <span className="flex-1">내 점수와 훈장</span>
                     <ChevronRight size={18} aria-hidden="true" />
@@ -1308,6 +1370,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
 
         {page === 'inbox' && (
           <div className="space-y-5">
+            {canReviewMissions && config.stage === 2 && renderReceivedApprovalQueue()}
             <section className="suho-sheet p-4 sm:p-5">
               <h2 className="mb-2 text-lg font-extrabold">받은 편지</h2>
               {receivedLetters.length === 0 ? (
@@ -1327,7 +1390,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
                 </ul>
               )}
             </section>
-            {canReviewMissions && renderReceivedApprovalQueue()}
+            {canReviewMissions && config.stage !== 2 && renderReceivedApprovalQueue()}
           </div>
         )}
 
