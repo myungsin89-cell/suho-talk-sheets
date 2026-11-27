@@ -39,7 +39,7 @@ export const SuhoGuidePoster: React.FC<SuhoGuidePosterProps> = ({
         </div>
 
         <div className="shrink-0 bg-white rounded-2xl border-2 border-[#3C1E1E] p-1.5 shadow-xs">
-          <SuhoHamster variant="welcome" size={72} />
+          <SuhoHamster variant="welcome" angelStyle="girl" size={72} />
         </div>
       </header>
 
@@ -166,7 +166,7 @@ export const SuhoGuidePoster: React.FC<SuhoGuidePosterProps> = ({
 
         <div className="grid grid-cols-4 gap-2">
           <div className="rounded-xl bg-white border border-[#E7DED0] p-2.5 text-center flex flex-col items-center justify-between gap-1">
-            <SuhoHamster variant="stealth" size={44} />
+            <SuhoHamster variant="stealth" angelStyle="girl" size={44} />
             <div className="text-[11px] font-black text-[#191919]">몰래 챙겨주기</div>
             <div className="text-[10px] text-[#767676] leading-tight">자리·물건 정돈</div>
             <span className="px-2 py-0.5 rounded-full bg-[#F5F6F8] border border-[#E5E7EB] text-[11px] font-black text-[#1B4D3E]">
@@ -175,7 +175,7 @@ export const SuhoGuidePoster: React.FC<SuhoGuidePosterProps> = ({
           </div>
 
           <div className="rounded-xl bg-white border border-[#E7DED0] p-2.5 text-center flex flex-col items-center justify-between gap-1">
-            <SuhoHamster variant="heart" size={44} />
+            <SuhoHamster variant="heart" angelStyle="boy" size={44} />
             <div className="text-[11px] font-black text-[#191919]">마음 표현하기</div>
             <div className="text-[10px] text-[#767676] leading-tight">쪽지·칭찬·박수</div>
             <span className="px-2 py-0.5 rounded-full bg-[#FFF4F1] border border-[#F3D2CA] text-[11px] font-black text-[#9F1239]">
@@ -184,7 +184,7 @@ export const SuhoGuidePoster: React.FC<SuhoGuidePosterProps> = ({
           </div>
 
           <div className="rounded-xl bg-white border border-[#E7DED0] p-2.5 text-center flex flex-col items-center justify-between gap-1">
-            <SuhoHamster variant="quest" size={44} />
+            <SuhoHamster variant="quest" angelStyle="girl" size={44} />
             <div className="text-[11px] font-black text-[#191919]">주간 미션</div>
             <div className="text-[10px] text-[#767676] leading-tight">선생님 특별 미션</div>
             <span className="px-2 py-0.5 rounded-full bg-[#FFFBEB] border border-[#FDE68A] text-[11px] font-black text-[#B45309]">
@@ -193,7 +193,7 @@ export const SuhoGuidePoster: React.FC<SuhoGuidePosterProps> = ({
           </div>
 
           <div className="rounded-xl bg-white border border-[#E7DED0] p-2.5 text-center flex flex-col items-center justify-between gap-1">
-            <SuhoHamster variant="power" size={44} />
+            <SuhoHamster variant="power" angelStyle="boy" size={44} />
             <div className="text-[11px] font-black text-[#191919]">직접 도와주기</div>
             <div className="text-[10px] text-[#767676] leading-tight">용기 내어 돕기</div>
             <span className="px-2 py-0.5 rounded-full bg-[#FEE500] border border-[#D97706]/40 text-[11px] font-black text-[#3C1E1E]">
