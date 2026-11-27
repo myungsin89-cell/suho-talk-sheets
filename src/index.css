@@ -178,8 +178,8 @@
 
   .a4-page {
     width: 100% !important;
-    max-height: 281mm !important;
-    height: 281mm !important;
+    max-height: 274mm !important;
+    height: 274mm !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
     page-break-inside: avoid !important;
@@ -187,7 +187,7 @@
     background: #FFFFFF !important;
     border: 2px solid #191919 !important;
     border-radius: 16px !important;
-    padding: 6mm !important;
+    padding: 5mm !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;

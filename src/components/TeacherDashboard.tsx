@@ -594,7 +594,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F6F8] pb-20">
+    <div className="min-h-screen bg-[#F5F6F8] pb-20 print:min-h-0 print:pb-0 print:bg-white">
       {/* 알림 토스트 */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-[70] max-w-md bg-[#3C1E1E] text-white px-5 py-3.5 rounded-xl shadow-lg flex items-center gap-3 no-print">
