@@ -16,7 +16,10 @@ import {
 } from '../utils/scoring';
 import { SuhoHamster, SuhoKakaoLogo } from './SuhoHamster';
 import { HonorMedalIcon } from './HonorMedalIcon';
-import { WorkbookPrintSheet } from './WorkbookPrintSheet';
+import {
+  getStudentWorkbookPageCount,
+  WorkbookPrintSheet,
+} from './WorkbookPrintSheet';
 import { LoginSlipPrintSheet } from './LoginSlipPrintSheet';
 import { MatchingBoardModal } from './MatchingBoardModal';
 import { WeeklyQuestPanel, SaveWeeklyQuest } from './WeeklyQuestPanel';
@@ -179,6 +182,15 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
   // ② 학급 현황 상태
   const identityRevealed = isIdentityRevealed(config);
   const collectingFinale = config.stage === 3 && !identityRevealed;
+  const canPrintWorkbooks = config.stage === 3 || identityRevealed;
+  const totalWorkbookPages = React.useMemo(
+    () =>
+      students.reduce(
+        (sum, stu) => sum + getStudentWorkbookPageCount(stu.id, missions),
+        0
+      ),
+    [students, missions]
+  );
   const canCheckMissions = config.stage >= 2 && !identityRevealed;
   const [studentSearch, setStudentSearch] = useState('');
   const [onlyIncompleteFinale, setOnlyIncompleteFinale] = useState(false);
@@ -1274,8 +1286,19 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
             {collectingFinale && (
               <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#e9d9ae] bg-[#fff5d6] p-3">
                 <p className="text-sm font-bold">추리 투표 {stageSummary.votedCount}/{students.length}명 · 마지막 편지 {stageSummary.lettersDoneCount}/{students.length}명</p>
-                <button type="button" onClick={() => setPendingStageChange('reveal')}
-                  className="min-h-11 rounded-lg bg-[#fee500] px-4 text-sm font-extrabold hover:bg-[#f4d900]">정체 공개하기</button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => window.print()}
+                    title="정체 공개 전에도 미리 인쇄해 두실 수 있습니다. 학생별 짝수 페이지(2쪽/4쪽)로 자동 구성되어 양면 인쇄·2쪽 모아찍기에 안전합니다."
+                    className="min-h-11 rounded-lg bg-[#3C1E1E] hover:bg-black px-4 text-xs sm:text-sm font-extrabold text-white inline-flex items-center gap-1.5"
+                  >
+                    <Printer className="w-4 h-4 text-[#FEE500]" />
+                    <span>전 학급 기록장 미리 인쇄 ({students.length}명 · 총 {totalWorkbookPages}쪽)</span>
+                  </button>
+                  <button type="button" onClick={() => setPendingStageChange('reveal')}
+                    className="min-h-11 rounded-lg bg-[#fee500] px-4 text-sm font-extrabold hover:bg-[#f4d900]">정체 공개하기</button>
+                </div>
               </div>
             )}
             {identityRevealed && (
@@ -1291,11 +1314,11 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  title="학생 1명당 2쪽 구성입니다. 인쇄 창에서 양면 인쇄 또는 2쪽 모아찍기를 선택하세요."
+                  title="학생별 짝수 페이지(2쪽/4쪽)로 자동 구성됩니다. 인쇄 창에서 양면 인쇄 또는 2쪽 모아찍기를 선택하세요."
                   className="sm:w-auto py-2.5 px-5 rounded-lg bg-[#3C1E1E] hover:bg-black text-white text-sm font-extrabold flex items-center justify-center gap-2"
                 >
                   <Printer className="w-4 h-4 text-[#FEE500]" />
-                  <span>전 학급 기록장 일괄 인쇄 ({students.length}명 · {students.length * 2}쪽)</span>
+                  <span>전 학급 기록장 일괄 인쇄 ({students.length}명 · 총 {totalWorkbookPages}쪽)</span>
                 </button>
               </div>
             )}
@@ -1882,7 +1905,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                                   <span>응원</span>
                                 </button>
                               )}
-                              {identityRevealed && (
+                              {canPrintWorkbooks && (
                                 <button
                                   type="button"
                                   onClick={() => setPreviewWorkbookStudent(stu)}
@@ -2095,7 +2118,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
             config={config}
             loginUrl={loginUrl}
           />
-        ) : !identityRevealed ? null : previewWorkbookStudent ? (
+        ) : !canPrintWorkbooks ? null : previewWorkbookStudent ? (
           <WorkbookPrintSheet
             student={
               students.find((s) => s.id === previewWorkbookStudent.id) ||
@@ -2469,7 +2492,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
       {/* ================================================================= */}
       {/* 모달 2: 개별 학생 A4 활동 기록지 인쇄 미리보기 모달 */}
       {/* ================================================================= */}
-      {identityRevealed && previewWorkbookStudent && (
+      {canPrintWorkbooks && previewWorkbookStudent && (
         <div className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-[2px] flex items-center justify-center p-4 no-print">
           <div className="bg-[#F5F6F8] border border-[#E5E7EB] rounded-xl max-w-5xl w-full max-h-[90vh] flex flex-col p-6 shadow-2xl">
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E5E7EB] pb-3 mb-4">
@@ -2478,10 +2501,10 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                 <div>
                   <h3 className="text-lg font-extrabold text-[#191919]">
                     {previewWorkbookStudent.number}번 {previewWorkbookStudent.name}{' '}
-                    학생 활동 기록장 (A4 2쪽)
+                    학생 활동 기록장 (A4 {getStudentWorkbookPageCount(previewWorkbookStudent.id, missions)}쪽)
                   </h3>
                   <p className="text-xs text-[#767676]">
-                    인쇄 설정에서 <strong>양면 인쇄</strong>(앞·뒤 1장) 또는 <strong>2쪽 모아찍기</strong>(반접이 소책자)를 선택해 뽑아 주세요.
+                    인쇄 설정에서 <strong>양면 인쇄</strong>(앞·뒤) 또는 <strong>2쪽 모아찍기</strong>(소책자)를 선택해 뽑아 주세요.
                   </p>
                 </div>
               </div>
@@ -2492,7 +2515,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                   className="px-4 py-2 rounded-lg bg-[#FEE500] hover:bg-[#F5DC00] text-[#3C1E1E] text-xs font-black flex items-center gap-1.5"
                 >
                   <Printer className="w-4 h-4" />
-                  <span>이 학생 기록장 인쇄 / PDF (2쪽)</span>
+                  <span>이 학생 기록장 인쇄 / PDF ({getStudentWorkbookPageCount(previewWorkbookStudent.id, missions)}쪽)</span>
                 </button>
                 <button
                   type="button"

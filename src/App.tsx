@@ -51,7 +51,10 @@ import {
 } from './components/TeacherEntryView';
 import { SuhoKakaoLogo } from './components/SuhoHamster';
 import { SuhoGuidePoster } from './components/SuhoGuidePoster';
-import { WorkbookPrintSheet } from './components/WorkbookPrintSheet';
+import {
+  getStudentWorkbookPageCount,
+  WorkbookPrintSheet,
+} from './components/WorkbookPrintSheet';
 import { getDailyLimitStatus } from './utils/scoring';
 import {
   applyWeeklyQuestChange,
@@ -114,7 +117,11 @@ export const App: React.FC = () => {
   const isPosterStandalone = searchParams?.get('poster') === '1';
   const posterClassName = searchParams?.get('className') || '우리 반 수호톡';
   const workbookParam = searchParams?.get('workbook');
-  const isWorkbookDemo = workbookParam === '1' || workbookParam === '2';
+  const isWorkbookDemo =
+    workbookParam === '1' ||
+    workbookParam === '2' ||
+    workbookParam === '4' ||
+    workbookParam === 'mixed';
   const studentGasUrl = rawGasParam ? normalizeGasWebAppUrl(rawGasParam) : '';
   const isStudentMode = Boolean(studentGasUrl || classParam);
 
@@ -416,7 +423,7 @@ export const App: React.FC = () => {
       stage: 3,
       revealOpened: true,
     };
-    const count = workbookParam === '2' ? 2 : 1;
+    const count = workbookParam === '2' || workbookParam === 'mixed' ? 2 : 1;
     const demoStudents = sampleClass.students.map((stu) => ({
       ...stu,
       openingLetterToAngel:
@@ -432,17 +439,73 @@ export const App: React.FC = () => {
         stu.revealLetterToTarget ||
         `안녕! 너의 비밀 수호천사는 바로 나 ${stu.name}이었어. 네가 환하게 웃을 때마다 나도 참 기뻤어!`,
     }));
+
+    const firstStu = demoStudents[0];
+    const firstTargetId = firstStu.targetId || demoStudents[1]?.id || firstStu.id;
+    const firstAngelId =
+      demoStudents.find((s) => s.targetId === firstStu.id)?.id ||
+      demoStudents[demoStudents.length - 1]?.id ||
+      firstStu.id;
+
+    let demoMissions = [...sampleClass.missions];
+    if (workbookParam === '4' || workbookParam === 'mixed') {
+      const existingSentCount = demoMissions.filter(
+        (m) => m.senderId === firstStu.id && !m.isPostmasterNote
+      ).length;
+      const existingRecvCount = demoMissions.filter(
+        (m) => m.receiverId === firstStu.id
+      ).length;
+
+      const extraSentNeeded = Math.max(0, 10 - existingSentCount);
+      for (let i = 0; i < extraSentNeeded; i++) {
+        demoMissions.push({
+          id: `demo_extra_sent_${i}`,
+          senderId: firstStu.id,
+          receiverId: firstTargetId,
+          type: i % 2 === 0 ? 'stealth' : 'heart',
+          content: `추가 비밀 선행 활동 ${i + 1}: 짝꿍이 기분 좋도록 몰래 자리와 사물함을 챙겨주었어요.`,
+          points: 10,
+          status: 'verified',
+          reply: i % 2 === 0 ? '정말 고마워!' : undefined,
+          dateKey: '2026-11-26',
+          createdAt: `11월 ${18 + i}일 10:0${i}`,
+          verifiedAt: `11월 ${18 + i}일 11:00`,
+        });
+      }
+
+      const extraRecvNeeded = Math.max(0, 9 - existingRecvCount);
+      for (let i = 0; i < extraRecvNeeded; i++) {
+        demoMissions.push({
+          id: `demo_extra_recv_${i}`,
+          senderId: firstAngelId,
+          receiverId: firstStu.id,
+          type: i % 2 === 0 ? 'power' : 'stealth',
+          content: `수호천사의 추가 응원 활동 ${i + 1}: 급식과 정리 시간에 조용히 도와주었어요.`,
+          points: 20,
+          status: 'verified',
+          reply: i % 3 === 0 ? '수호천사 최고!' : undefined,
+          dateKey: '2026-11-26',
+          createdAt: `11월 ${18 + i}일 13:1${i}`,
+          verifiedAt: `11월 ${18 + i}일 14:00`,
+        });
+      }
+    }
+
     const targetList = demoStudents.slice(0, count);
+    const totalDemoPages = targetList.reduce(
+      (sum, stu) => sum + getStudentWorkbookPageCount(stu.id, demoMissions),
+      0
+    );
 
     return (
       <div className="min-h-screen bg-[#F5F6F8] py-6 px-4 print:min-h-0 print:p-0 print:bg-white">
         <div className="max-w-[760px] mx-auto mb-4 flex flex-wrap items-center justify-between gap-2 no-print">
           <div>
             <div className="text-sm font-extrabold text-[#191919]">
-              수호천사 활동 기록장 미리보기 ({count}명 · 총 {count * 2}쪽)
+              수호천사 활동 기록장 미리보기 ({count}명 · 총 {totalDemoPages}쪽)
             </div>
             <div className="text-xs text-[#767676]">
-              양면 인쇄(앞·뒤 1장) 또는 2쪽 모아찍기(소책자)로 인쇄하기 알맞은 템플릿입니다.
+              양면 인쇄(앞·뒤) 또는 2쪽 모아찍기(소책자)로 인쇄하기 알맞도록 항상 짝수 쪽으로 구성됩니다.
             </div>
           </div>
           <button
@@ -459,7 +522,7 @@ export const App: React.FC = () => {
               key={stu.id}
               student={stu}
               students={demoStudents}
-              missions={sampleClass.missions}
+              missions={demoMissions}
               config={demoConfig}
               isPageBreak={idx < targetList.length - 1}
             />
