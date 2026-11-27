@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ClassConfig, MissionLog, Student } from '../types';
 import { getScoreStage } from '../utils/classProgress';
 import { calculateStudentScore } from '../utils/scoring';
@@ -9,7 +9,9 @@ import {
   Crown,
   Eye,
   EyeOff,
+  Maximize2,
   Medal,
+  Minimize2,
   Sparkles,
   Trophy,
   X,
@@ -44,6 +46,45 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
   onClose,
 }) => {
   const [topLimit, setTopLimit] = useState<TopLimit>(5);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleFsChange = () => {
+      if (!document.fullscreenElement) {
+        setIsFullscreen(false);
+      }
+    };
+    document.addEventListener('fullscreenchange', handleFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFsChange);
+      if (document.fullscreenElement) {
+        void document.exitFullscreen().catch(() => {});
+      }
+    };
+  }, []);
+
+  const toggleFullscreen = async () => {
+    if (!isFullscreen) {
+      setIsFullscreen(true);
+      try {
+        if (containerRef.current?.requestFullscreen) {
+          await containerRef.current.requestFullscreen();
+        }
+      } catch {
+        // Fallback to full-viewport CSS mode if browser blocks native fullscreen.
+      }
+    } else {
+      setIsFullscreen(false);
+      try {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen();
+        }
+      } catch {
+        // ignore exitFullscreen errors
+      }
+    }
+  };
 
   const scoreStage = getScoreStage(config);
 
@@ -95,14 +136,21 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-[65] bg-black/55 backdrop-blur-[2px] flex items-center justify-center p-3 sm:p-5 no-print"
-      onClick={onClose}
+      className={`fixed inset-0 z-[65] bg-black/55 backdrop-blur-[2px] flex items-center justify-center no-print ${
+        isFullscreen ? 'p-0' : 'p-3 sm:p-5'
+      }`}
+      onClick={isFullscreen ? undefined : onClose}
     >
       <div
+        ref={containerRef}
         role="dialog"
         aria-modal="true"
         aria-label="우리 반 수호천사 명예의 전당"
-        className="bg-[#FCF9F2] border-2 border-[#3C1E1E] rounded-2xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden"
+        className={`bg-[#FCF9F2] flex flex-col overflow-hidden ${
+          isFullscreen
+            ? 'w-full h-full max-w-none max-h-none rounded-none border-0'
+            : 'border-2 border-[#3C1E1E] rounded-2xl max-w-4xl w-full max-h-[92vh] shadow-2xl'
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* 상단 헤더 */}
@@ -171,6 +219,25 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
 
             <button
               type="button"
+              onClick={() => void toggleFullscreen()}
+              className="px-3 py-1.5 rounded-lg bg-white text-[#3C1E1E] border border-[#3C1E1E]/25 hover:bg-[#FFF5D6] text-xs font-black inline-flex items-center gap-1"
+              title={isFullscreen ? '원래 크기로 돌아가기' : '전자칠판·TV용 전체화면으로 보기'}
+            >
+              {isFullscreen ? (
+                <>
+                  <Minimize2 className="w-3.5 h-3.5" />
+                  <span>창 축소</span>
+                </>
+              ) : (
+                <>
+                  <Maximize2 className="w-3.5 h-3.5" />
+                  <span>전체화면</span>
+                </>
+              )}
+            </button>
+
+            <button
+              type="button"
               onClick={onClose}
               className="p-1.5 rounded-lg bg-white/80 hover:bg-white text-[#3C1E1E]"
               aria-label="명예의 전당 닫기"
@@ -181,7 +248,11 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
         </div>
 
         {/* 본문 */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5">
+        <div
+          className={`flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 ${
+            isFullscreen ? 'max-w-6xl w-full mx-auto' : ''
+          }`}
+        >
           {/* 학급 전체 공동 응원 지표 */}
           <div className="grid grid-cols-3 gap-2.5 text-center">
             <div className="bg-white rounded-xl border border-[#E7DED0] p-3">
