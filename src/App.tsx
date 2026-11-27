@@ -50,6 +50,7 @@ import {
   TeacherEntryView,
 } from './components/TeacherEntryView';
 import { SuhoKakaoLogo } from './components/SuhoHamster';
+import { SuhoGuidePoster } from './components/SuhoGuidePoster';
 import { getDailyLimitStatus } from './utils/scoring';
 import {
   applyWeeklyQuestChange,
@@ -109,6 +110,8 @@ export const App: React.FC = () => {
       : null;
   const rawGasParam = searchParams?.get('gas') || null;
   const classParam = searchParams?.get('class') || null;
+  const isPosterStandalone = searchParams?.get('poster') === '1';
+  const posterClassName = searchParams?.get('className') || '우리 반 수호톡';
   const studentGasUrl = rawGasParam ? normalizeGasWebAppUrl(rawGasParam) : '';
   const isStudentMode = Boolean(studentGasUrl || classParam);
 
@@ -189,7 +192,7 @@ export const App: React.FC = () => {
 
   const [gasTeacherClassroom, setGasTeacherClassroom] = useState<ClassRoom | null>(null);
   const [restoringTeacherSession, setRestoringTeacherSession] = useState<boolean>(
-    Boolean(!isStudentMode && teacherSession?.mode === 'gas' && teacherSession.gasWebAppUrl && teacherSession.teacherPassword)
+    Boolean(!isStudentMode && !isPosterStandalone && teacherSession?.mode === 'gas' && teacherSession.gasWebAppUrl && teacherSession.teacherPassword)
   );
 
   const [teacherInitialTab, setTeacherInitialTab] = useState<TeacherTab>('status');
@@ -292,7 +295,7 @@ export const App: React.FC = () => {
   // 교사 GAS 세션 복원 + 12~15초 폴링
   // =========================================================================
   useEffect(() => {
-    if (isStudentMode) return;
+    if (isStudentMode || isPosterStandalone) return;
     if (teacherSession?.mode !== 'gas' || !teacherSession.gasWebAppUrl || !teacherSession.teacherPassword) {
       setRestoringTeacherSession(false);
       return;
@@ -381,6 +384,26 @@ export const App: React.FC = () => {
         : [nextItem, ...prev];
     });
   };
+
+  if (isPosterStandalone) {
+    return (
+      <div className="min-h-screen bg-[#F5F6F8] py-6 px-4 print:min-h-0 print:p-0 print:bg-white">
+        <div className="max-w-[760px] mx-auto mb-4 flex items-center justify-between gap-2 no-print">
+          <div className="text-sm font-extrabold text-[#191919]">
+            교실 게시판용 규칙·점수 안내판 (A4 1장)
+          </div>
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="px-4 py-2 rounded-lg bg-[#FEE500] hover:bg-[#F5DC00] text-[#3C1E1E] text-xs font-black"
+          >
+            인쇄 / PDF 저장
+          </button>
+        </div>
+        <SuhoGuidePoster classNameText={posterClassName} />
+      </div>
+    );
+  }
 
   // =========================================================================
   // 1) 학생 전용 경로 (?gas=... 또는 로컬 ?class=...)
