@@ -235,7 +235,8 @@ export const StudentView: React.FC<StudentViewProps> = ({
   const myMedals = student.medals || [];
   const visibleActivities = ACTIVITY_META_LIST.filter((item) => hasWeeklyQuest || item.type !== 'quest');
   const mySentMissions = missions.filter((m) => m.senderId === student.id && !m.isPostmasterNote);
-  const pendingSentCount = mySentMissions.filter((m) => m.status !== 'verified').length;
+  const pendingSentCount = mySentMissions.filter((m) => m.status === 'pending').length;
+  const rejectedSentCount = mySentMissions.filter((m) => m.status === 'hold').length;
   const myReceivedMissions = missions.filter((m) => m.receiverId === student.id);
   const pendingReceivedCount = myReceivedMissions.filter((m) => m.status === 'pending').length;
   const canChooseActivity = (type: ActivityType) => type === 'quest' ? dailyLimit.canSendQuest : dailyLimit.canSendRegular;
@@ -336,12 +337,8 @@ export const StudentView: React.FC<StudentViewProps> = ({
     const pendingList = myReceivedMissions
       .filter((m) => m.status === 'pending')
       .reverse();
-    const holdList = myReceivedMissions
-      .filter((m) => m.status === 'hold')
-      .reverse();
-    const actionableReceived = [...pendingList, ...holdList];
-    const approvedReceived = myReceivedMissions
-      .filter((m) => m.status === 'verified')
+    const completedReceived = myReceivedMissions
+      .filter((m) => m.status === 'verified' || m.status === 'hold')
       .reverse();
 
     return (
@@ -357,8 +354,8 @@ export const StudentView: React.FC<StudentViewProps> = ({
           </span>
         </div>
 
-        {/* 승인/보류 대상 카드 */}
-        {actionableReceived.length === 0 ? (
+        {/* 확인 대기 미션 카드 */}
+        {pendingList.length === 0 ? (
           <div className="bg-white rounded-xl border border-[#E5E7EB] p-7 text-center space-y-2 shadow-sm">
             <SuhoHamster variant="welcome" size={60} className="mx-auto" />
             <h3 className="text-sm font-extrabold text-[#191919]">
@@ -370,18 +367,15 @@ export const StudentView: React.FC<StudentViewProps> = ({
           </div>
         ) : (
           <div className="space-y-3">
-            {actionableReceived.map((m) => {
+            {pendingList.map((m) => {
               const meta =
                 ACTIVITY_META_LIST.find((a) => a.type === m.type) ||
                 ACTIVITY_META_LIST[0];
-              const isPending = m.status === 'pending';
 
               return (
                 <div
                   key={m.id}
-                  className={`bg-white rounded-xl border border-[#E5E7EB] border-l-4 p-4 sm:p-5 shadow-sm space-y-3 ${
-                    isPending ? 'border-l-[#FEE500]' : 'border-l-gray-300'
-                  }`}
+                  className="bg-white rounded-xl border border-[#E5E7EB] border-l-4 border-l-[#FEE500] p-4 sm:p-5 shadow-sm space-y-3"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2 text-xs">
@@ -398,14 +392,8 @@ export const StudentView: React.FC<StudentViewProps> = ({
                       </span>
                     </div>
 
-                    <span
-                      className={`text-[11px] font-extrabold px-2 py-0.5 rounded-md border ${
-                        isPending
-                          ? 'bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]'
-                          : 'bg-gray-100 text-[#767676] border-gray-200'
-                      }`}
-                    >
-                      {isPending ? '확인이 필요해요' : '잘 모르겠어요'}
+                    <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md border bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]">
+                      확인이 필요해요
                     </span>
                   </div>
 
@@ -429,21 +417,15 @@ export const StudentView: React.FC<StudentViewProps> = ({
                       <span>확인했어요</span>
                     </button>
 
-                    {isPending ? (
-                      <button
-                        type="button"
-                        onClick={() => void save(() => onHoldMission(m.id), '‘잘 모르겠어요’로 표시했어요. 나중에 기억나면 다시 ‘확인했어요’를 누를 수 있어요.')}
-                        disabled={isSaving || isPreviewMode}
-                        className="suho-secondary text-sm disabled:opacity-55"
-                      >
-                        <HelpCircle className="w-4 h-4" aria-hidden="true" />
-                        <span>잘 모르겠어요</span>
-                      </button>
-                    ) : (
-                      <span className="text-[11px] font-medium text-[#767676]">
-                        기억나거나 확인되면 ‘확인했어요’를 눌러 주세요.
-                      </span>
-                    )}
+                    <button
+                      type="button"
+                      onClick={() => void save(() => onHoldMission(m.id), '‘잘 모르겠어요’로 응답했어요. 수호천사에게 전달됩니다.')}
+                      disabled={isSaving || isPreviewMode}
+                      className="suho-secondary text-sm disabled:opacity-55"
+                    >
+                      <HelpCircle className="w-4 h-4" aria-hidden="true" />
+                      <span>잘 모르겠어요</span>
+                    </button>
                   </div>
                 </div>
               );
@@ -451,28 +433,29 @@ export const StudentView: React.FC<StudentViewProps> = ({
           </div>
         )}
 
-        {/* 승인 완료된 미션 기록 아카이브 (구분선 리스트) */}
+        {/* 응답 완료된 미션 기록 아카이브 (확인 완료 / 잘 모르겠어요) */}
         <section className="bg-white rounded-xl border border-[#E5E7EB] shadow-sm overflow-hidden">
           <div className="px-5 py-3.5 border-b border-[#E5E7EB] flex items-center justify-between">
             <h3 className="text-sm font-extrabold text-[#191919] flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>확인한 미션 ({approvedReceived.length}건)</span>
+              <span>응답한 미션 ({completedReceived.length}건)</span>
             </h3>
             <span className="text-xs font-medium text-[#767676]">
               솔직한 확인 감사합니다
             </span>
           </div>
 
-          {approvedReceived.length === 0 ? (
+          {completedReceived.length === 0 ? (
             <p className="text-xs text-[#767676] px-5 py-6 text-center">
-              아직 확인한 미션이 없어요.
+              아직 응답한 미션이 없어요.
             </p>
           ) : (
             <div className="divide-y divide-[#F0F1F4]">
-              {approvedReceived.map((m) => {
+              {completedReceived.map((m) => {
                 const meta =
                   ACTIVITY_META_LIST.find((a) => a.type === m.type) ||
                   ACTIVITY_META_LIST[0];
+                const isVerified = m.status === 'verified';
                 return (
                   <div key={m.id} className="p-4 sm:px-5 space-y-1.5">
                     <div className="flex flex-wrap items-center justify-between gap-2">
@@ -490,9 +473,15 @@ export const StudentView: React.FC<StudentViewProps> = ({
                         </span>
                       </div>
 
-                      <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        확인 완료
-                      </span>
+                      {isVerified ? (
+                        <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          확인 완료
+                        </span>
+                      ) : (
+                        <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-rose-50 text-rose-700 border border-rose-200">
+                          잘 모르겠어요 (미확인)
+                        </span>
+                      )}
                     </div>
 
                     {m.questText && <p className="break-words text-xs font-bold text-[#685852]">주간 미션: {m.questText}</p>}
@@ -501,7 +490,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
                       {m.content}
                     </p>
 
-                    {m.reply && (
+                    {isVerified && m.reply && (
                       <p className="text-xs text-[#767676] border-l-2 border-[#FEE500] pl-2.5 mt-1">
                         내가 남긴 한마디: “{m.reply}”
                       </p>
@@ -1510,6 +1499,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
                 </h3>
                 <span className="text-xs font-bold text-[#767676]">
                   친구 확인 {score.verifiedSentCount} · 기다리는 중 {pendingSentCount}
+                  {rejectedSentCount > 0 ? ` · 미확인 ${rejectedSentCount}` : ''}
                 </span>
               </div>
 
@@ -1543,8 +1533,8 @@ export const StudentView: React.FC<StudentViewProps> = ({
                               친구 확인 +{m.points}점
                             </span>
                           ) : m.status === 'hold' ? (
-                            <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-gray-100 text-[#767676] border border-gray-200">
-                              짝꿍이 잘 모르겠대요
+                            <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-rose-50 text-rose-700 border border-rose-200">
+                              잘 모르겠다고 해요
                             </span>
                           ) : (
                             <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]">
@@ -1558,6 +1548,12 @@ export const StudentView: React.FC<StudentViewProps> = ({
                         <p className="text-sm text-[#191919] font-medium leading-relaxed">
                           {m.content}
                         </p>
+
+                        {m.status === 'hold' && (
+                          <div className="text-[11px] font-medium text-rose-700">
+                            짝꿍이 잘 모르겠다고 해요. 다음엔 조금 더 분명하게 마음을 전해 보세요!
+                          </div>
+                        )}
 
                         {m.status === 'verified' &&
                           (m.reply ? (

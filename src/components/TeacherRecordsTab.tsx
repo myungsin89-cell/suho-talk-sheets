@@ -55,7 +55,7 @@ const LETTER_KIND_BADGE: Record<LetterKind, string> = {
 const MISSION_STATUS_BADGE: Record<MissionLog['status'], string> = {
   verified: 'bg-emerald-50 text-emerald-700 border-emerald-200',
   pending: 'bg-[#FEE500]/70 text-[#3C1E1E] border-[#E5D200]',
-  hold: 'bg-gray-100 text-[#767676] border-[#E5E7EB]',
+  hold: 'bg-rose-50 text-rose-700 border-rose-200',
 };
 
 export const TeacherRecordsTab: React.FC<TeacherRecordsTabProps> = ({
