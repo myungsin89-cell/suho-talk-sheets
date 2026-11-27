@@ -1291,10 +1291,11 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                 <button
                   type="button"
                   onClick={() => window.print()}
+                  title="학생 1명당 2쪽 구성입니다. 인쇄 창에서 양면 인쇄 또는 2쪽 모아찍기를 선택하세요."
                   className="sm:w-auto py-2.5 px-5 rounded-lg bg-[#3C1E1E] hover:bg-black text-white text-sm font-extrabold flex items-center justify-center gap-2"
                 >
                   <Printer className="w-4 h-4 text-[#FEE500]" />
-                  <span>전 학급 A4 일괄 인쇄 ({students.length}명)</span>
+                  <span>전 학급 기록장 일괄 인쇄 ({students.length}명 · {students.length * 2}쪽)</span>
                 </button>
               </div>
             )}
@@ -2474,10 +2475,15 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E5E7EB] pb-3 mb-4">
               <div className="flex items-center gap-2.5">
                 <Printer className="w-5 h-5 text-[#191919]" />
-                <h3 className="text-lg font-extrabold text-[#191919]">
-                  {previewWorkbookStudent.number}번 {previewWorkbookStudent.name}{' '}
-                  학생 A4 활동 기록지
-                </h3>
+                <div>
+                  <h3 className="text-lg font-extrabold text-[#191919]">
+                    {previewWorkbookStudent.number}번 {previewWorkbookStudent.name}{' '}
+                    학생 활동 기록장 (A4 2쪽)
+                  </h3>
+                  <p className="text-xs text-[#767676]">
+                    인쇄 설정에서 <strong>양면 인쇄</strong>(앞·뒤 1장) 또는 <strong>2쪽 모아찍기</strong>(반접이 소책자)를 선택해 뽑아 주세요.
+                  </p>
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -2486,7 +2492,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                   className="px-4 py-2 rounded-lg bg-[#FEE500] hover:bg-[#F5DC00] text-[#3C1E1E] text-xs font-black flex items-center gap-1.5"
                 >
                   <Printer className="w-4 h-4" />
-                  <span>이 학생 A4 기록지 인쇄하기</span>
+                  <span>이 학생 기록장 인쇄 / PDF (2쪽)</span>
                 </button>
                 <button
                   type="button"
@@ -2498,7 +2504,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
               </div>
             </div>
 
-            <div className="overflow-y-auto space-y-5 pr-1">
+            <div className="overflow-y-auto space-y-6 pr-1">
               <WorkbookPrintSheet
                 student={
                   students.find((s) => s.id === previewWorkbookStudent.id) ||

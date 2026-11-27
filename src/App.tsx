@@ -51,6 +51,7 @@ import {
 } from './components/TeacherEntryView';
 import { SuhoKakaoLogo } from './components/SuhoHamster';
 import { SuhoGuidePoster } from './components/SuhoGuidePoster';
+import { WorkbookPrintSheet } from './components/WorkbookPrintSheet';
 import { getDailyLimitStatus } from './utils/scoring';
 import {
   applyWeeklyQuestChange,
@@ -112,6 +113,8 @@ export const App: React.FC = () => {
   const classParam = searchParams?.get('class') || null;
   const isPosterStandalone = searchParams?.get('poster') === '1';
   const posterClassName = searchParams?.get('className') || '우리 반 수호톡';
+  const workbookParam = searchParams?.get('workbook');
+  const isWorkbookDemo = workbookParam === '1' || workbookParam === '2';
   const studentGasUrl = rawGasParam ? normalizeGasWebAppUrl(rawGasParam) : '';
   const isStudentMode = Boolean(studentGasUrl || classParam);
 
@@ -192,7 +195,7 @@ export const App: React.FC = () => {
 
   const [gasTeacherClassroom, setGasTeacherClassroom] = useState<ClassRoom | null>(null);
   const [restoringTeacherSession, setRestoringTeacherSession] = useState<boolean>(
-    Boolean(!isStudentMode && !isPosterStandalone && teacherSession?.mode === 'gas' && teacherSession.gasWebAppUrl && teacherSession.teacherPassword)
+    Boolean(!isStudentMode && !isPosterStandalone && !isWorkbookDemo && teacherSession?.mode === 'gas' && teacherSession.gasWebAppUrl && teacherSession.teacherPassword)
   );
 
   const [teacherInitialTab, setTeacherInitialTab] = useState<TeacherTab>('status');
@@ -295,7 +298,7 @@ export const App: React.FC = () => {
   // 교사 GAS 세션 복원 + 12~15초 폴링
   // =========================================================================
   useEffect(() => {
-    if (isStudentMode || isPosterStandalone) return;
+    if (isStudentMode || isPosterStandalone || isWorkbookDemo) return;
     if (teacherSession?.mode !== 'gas' || !teacherSession.gasWebAppUrl || !teacherSession.teacherPassword) {
       setRestoringTeacherSession(false);
       return;
@@ -401,6 +404,67 @@ export const App: React.FC = () => {
           </button>
         </div>
         <SuhoGuidePoster classNameText={posterClassName} />
+      </div>
+    );
+  }
+
+  if (isWorkbookDemo) {
+    const sampleClass = createDefaultClassRoom();
+    const demoConfig: ClassConfig = {
+      ...sampleClass.config,
+      className: '4학년 4반',
+      stage: 3,
+      revealOpened: true,
+    };
+    const count = workbookParam === '2' ? 2 : 1;
+    const demoStudents = sampleClass.students.map((stu) => ({
+      ...stu,
+      openingLetterToAngel:
+        stu.openingLetterToAngel ||
+        '안녕, 나의 수호천사야! 나는 요즘 피구랑 보드게임을 좋아해. 앞으로 잘 부탁해!',
+      openingReplyToTarget:
+        stu.openingReplyToTarget ||
+        '반가워! 내가 너를 몰래 잘 챙겨줄게. 오늘도 즐거운 하루 보내자!',
+      thankLetterToAngel:
+        stu.thankLetterToAngel ||
+        '그동안 몰래 챙겨줘서 정말 고마웠어! 덕분에 학교 생활이 훨씬 더 즐겁고 따뜻했어.',
+      revealLetterToTarget:
+        stu.revealLetterToTarget ||
+        `안녕! 너의 비밀 수호천사는 바로 나 ${stu.name}이었어. 네가 환하게 웃을 때마다 나도 참 기뻤어!`,
+    }));
+    const targetList = demoStudents.slice(0, count);
+
+    return (
+      <div className="min-h-screen bg-[#F5F6F8] py-6 px-4 print:min-h-0 print:p-0 print:bg-white">
+        <div className="max-w-[760px] mx-auto mb-4 flex flex-wrap items-center justify-between gap-2 no-print">
+          <div>
+            <div className="text-sm font-extrabold text-[#191919]">
+              수호천사 활동 기록장 미리보기 ({count}명 · 총 {count * 2}쪽)
+            </div>
+            <div className="text-xs text-[#767676]">
+              양면 인쇄(앞·뒤 1장) 또는 2쪽 모아찍기(소책자)로 인쇄하기 알맞은 템플릿입니다.
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="px-4 py-2 rounded-lg bg-[#FEE500] hover:bg-[#F5DC00] text-[#3C1E1E] text-xs font-black"
+          >
+            인쇄 / PDF 저장
+          </button>
+        </div>
+        <div className="space-y-6 print:space-y-0">
+          {targetList.map((stu, idx) => (
+            <WorkbookPrintSheet
+              key={stu.id}
+              student={stu}
+              students={demoStudents}
+              missions={sampleClass.missions}
+              config={demoConfig}
+              isPageBreak={idx < targetList.length - 1}
+            />
+          ))}
+        </div>
       </div>
     );
   }

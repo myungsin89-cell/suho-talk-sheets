@@ -213,6 +213,27 @@
     gap: 3mm !important;
   }
 
+  .a4-workbook-page {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    height: 277mm !important;
+    max-height: 277mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    background: #FCF9F2 !important;
+    border: 2px solid #3C1E1E !important;
+    border-radius: 18px !important;
+    padding: 5.5mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    gap: 3mm !important;
+    overflow: hidden !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
   .a4-slip-page {
     width: 100% !important;
     page-break-inside: avoid !important;
