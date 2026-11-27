@@ -24,6 +24,7 @@ import { TeacherRecordsTab } from './TeacherRecordsTab';
 import { StudentRecordModal } from './StudentRecordModal';
 import { TeacherLetterCaptureModal } from './TeacherLetterCaptureModal';
 import { SuhoGuidePoster } from './SuhoGuidePoster';
+import { LeaderboardModal } from './LeaderboardModal';
 import { TeacherLetterRecord } from '../utils/teacherRecords';
 import { getScoreStage, isIdentityRevealed } from '../utils/classProgress';
 import { QRCodeSVG } from 'qrcode.react';
@@ -56,6 +57,7 @@ import {
   Shuffle,
   Sparkles,
   Trash2,
+  Trophy,
   UserPlus,
   Users,
   X,
@@ -221,6 +223,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
   const [showStudentPins, setShowStudentPins] = useState(false);
   const [showLoginSlipsModal, setShowLoginSlipsModal] = useState(false);
   const [showGuidePosterModal, setShowGuidePosterModal] = useState(false);
+  const [showLeaderboardModal, setShowLeaderboardModal] = useState(false);
   const [showQrBoardModal, setShowQrBoardModal] = useState(false);
   const [showCreateClassModal, setShowCreateClassModal] = useState(false);
   const [anonymizeRecords, setAnonymizeRecords] = useState(false);
@@ -295,6 +298,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
         if (awardMedalTarget) setAwardMedalTarget(null);
         if (showLoginSlipsModal) setShowLoginSlipsModal(false);
         if (showGuidePosterModal) setShowGuidePosterModal(false);
+        if (showLeaderboardModal) setShowLeaderboardModal(false);
         if (showQrBoardModal) setShowQrBoardModal(false);
         if (showCreateClassModal) setShowCreateClassModal(false);
         if (detailRecordStudentId) setDetailRecordStudentId(null);
@@ -310,6 +314,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
     awardMedalTarget,
     showLoginSlipsModal,
     showGuidePosterModal,
+    showLeaderboardModal,
     showQrBoardModal,
     showCreateClassModal,
     detailRecordStudentId,
@@ -1169,8 +1174,19 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                 <p className="text-sm font-bold text-[#735020]">학생에게 열어둔 활동 · {STAGE_INFO[config.stage].label}</p>
                 <h1 className="mt-1 text-xl font-black tracking-tight sm:text-2xl">오늘 확인할 일</h1>
               </div>
-              <a href="#student-progress" onClick={() => { setOverviewFilter(null); setOnlyIncompleteFinale(false); setStudentSearch(''); }}
-                className="rounded-lg px-3 py-2.5 text-sm font-bold underline underline-offset-4">전체 현황 보기</a>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowLeaderboardModal(true)}
+                  disabled={!students.length}
+                  className="inline-flex min-h-10 items-center gap-1.5 rounded-lg bg-[#FEE500] hover:bg-[#F5DC00] disabled:opacity-50 px-3.5 py-2 text-xs sm:text-sm font-black text-[#3C1E1E] border border-[#d7bc64]"
+                >
+                  <Trophy className="w-4 h-4 text-[#B45309]" />
+                  <span>명예의 전당 (순위판)</span>
+                </button>
+                <a href="#student-progress" onClick={() => { setOverviewFilter(null); setOnlyIncompleteFinale(false); setStudentSearch(''); }}
+                  className="rounded-lg px-3 py-2.5 text-sm font-bold underline underline-offset-4">전체 현황 보기</a>
+              </div>
             </div>
             {!students.length ? (
               <p className="mt-3 text-sm">수업 준비에서 학생 명단을 먼저 등록해 주세요.</p>
@@ -2977,6 +2993,17 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
             </div>
           </div>
         </div>
+      )}
+
+      {showLeaderboardModal && (
+        <LeaderboardModal
+          students={students}
+          missions={missions}
+          config={config}
+          anonymize={anonymizeRecords}
+          onToggleAnonymize={() => setAnonymizeRecords((prev) => !prev)}
+          onClose={() => setShowLeaderboardModal(false)}
+        />
       )}
 
       {detailRecordStudent && (
