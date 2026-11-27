@@ -182,7 +182,7 @@ export const SuhoGuidePoster: React.FC<SuhoGuidePosterProps> = ({
               2단계 · 비밀 활동
             </span>
             <p className="text-[11.5px] font-bold text-[#2D201A] mt-1.5 leading-snug">
-              몰래 도와주고 기록해요! 친구가 해준 일은 ‘진짜예요’로 확인해요.
+              몰래 도와주고 기록해요! 친구가 해준 일은 ‘확인했어요’로 확인해요.
             </p>
           </div>
 
@@ -363,7 +363,7 @@ export const SuhoGuidePoster: React.FC<SuhoGuidePosterProps> = ({
               “점수보다 더 빛나는 건 친구를 생각하는 따뜻한 마음! 오늘도 우리 반 수호천사 파이팅!”
             </div>
             <div className="text-[10.5px] font-semibold text-[#E7DED0]">
-              ※ 거짓 활동 기록은 안 돼요! 짝꿍이 ‘진짜예요’를 눌러 주어야 점수가 인정됩니다.
+              ※ 거짓 활동 기록은 안 돼요! 짝꿍이 ‘확인했어요’를 눌러 주어야 점수가 인정됩니다.
             </div>
           </div>
         </div>

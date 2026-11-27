@@ -107,7 +107,7 @@ export const getMissionStatusLabel = (status: MissionStatus): string => {
     case 'pending':
       return '승인 대기';
     case 'hold':
-      return '보류';
+      return '잘 모르겠어요';
   }
 };
 

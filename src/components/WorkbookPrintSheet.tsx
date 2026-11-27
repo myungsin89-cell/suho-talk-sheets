@@ -243,7 +243,7 @@ export const WorkbookPrintSheet: React.FC<WorkbookPrintSheetProps> = ({
                       {getActivityLabel(m.type)} (+{m.points}점)
                     </span>
                     <span className="text-[10px] font-semibold text-[#767676]">
-                      {m.status === 'verified' ? '승인 완료' : '승인 대기'}
+                      {m.status === 'verified' ? '승인 완료' : m.status === 'hold' ? '잘 모르겠어요' : '승인 대기'}
                     </span>
                   </div>
                   <p className="text-[#191919] leading-snug line-clamp-2">{m.content}</p>

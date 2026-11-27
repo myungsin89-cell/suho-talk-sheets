@@ -32,9 +32,9 @@ import {
   CheckCircle2,
   ChevronRight,
   ClipboardCheck,
-  Clock,
   EyeOff,
   Feather,
+  HelpCircle,
   Lock,
   LogOut,
   MailCheck,
@@ -405,7 +405,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
                           : 'bg-gray-100 text-[#767676] border-gray-200'
                       }`}
                     >
-                      {isPending ? '확인이 필요해요' : '나중에 확인'}
+                      {isPending ? '확인이 필요해요' : '잘 모르겠어요'}
                     </span>
                   </div>
 
@@ -432,16 +432,16 @@ export const StudentView: React.FC<StudentViewProps> = ({
                     {isPending ? (
                       <button
                         type="button"
-                        onClick={() => void save(() => onHoldMission(m.id), '나중에 확인할 수 있도록 남겨 뒀어요.')}
+                        onClick={() => void save(() => onHoldMission(m.id), '‘잘 모르겠어요’로 표시했어요. 나중에 기억나면 다시 ‘확인했어요’를 누를 수 있어요.')}
                         disabled={isSaving || isPreviewMode}
                         className="suho-secondary text-sm disabled:opacity-55"
                       >
-                        <Clock className="w-3.5 h-3.5" />
-                        <span>나중에 확인할래요</span>
+                        <HelpCircle className="w-4 h-4" aria-hidden="true" />
+                        <span>잘 모르겠어요</span>
                       </button>
                     ) : (
                       <span className="text-[11px] font-medium text-[#767676]">
-                        나중에 다시 확인할 수 있어요.
+                        기억나거나 확인되면 ‘확인했어요’를 눌러 주세요.
                       </span>
                     )}
                   </div>
@@ -1544,7 +1544,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
                             </span>
                           ) : m.status === 'hold' ? (
                             <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-gray-100 text-[#767676] border border-gray-200">
-                              보류
+                              짝꿍이 잘 모르겠대요
                             </span>
                           ) : (
                             <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]">
@@ -2177,7 +2177,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
 
             <form onSubmit={handleConfirmVerify}>
               <label htmlFor="mission-reply" className="block text-sm font-extrabold text-[#191919] mb-2">
-                고마운 한마디 (선택)
+                수호천사에게 고마운 답장 한마디 (선택)
               </label>
               <input id="mission-reply"
                 type="text"
@@ -2188,7 +2188,7 @@ export const StudentView: React.FC<StudentViewProps> = ({
                 className="w-full rounded-lg bg-[#F5F6F8] border border-[#E5E7EB] focus:border-[#3C1E1E] focus:bg-white focus:outline-none px-4 py-2.5 text-sm text-[#191919]"
               />
               <p className="text-[11px] text-[#767676] mt-2">
-                확인하면 도와준 친구에게 알려드려요.
+                답장을 적지 않고 바로 확인해도 돼요. 확인하면 수호천사에게 전달됩니다.
               </p>
 
               <div className="mt-4 flex justify-end gap-2">
